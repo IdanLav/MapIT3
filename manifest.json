@@ -1,7 +1,7 @@
 {
   "name": "MapIt",
   "short_name": "MapIt",
-  "description": "Screenshot a travel post – AI finds the location and opens Google Maps",
+  "description": "Share a travel video or screenshot – AI finds the location and opens Google Maps",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
@@ -28,12 +28,12 @@
     "enctype": "multipart/form-data",
     "params": {
       "title": "title",
-      "text": "text",
-      "url": "url",
+      "text":  "text",
+      "url":   "url",
       "files": [
         {
           "name": "media",
-          "accept": ["image/png", "image/jpeg", "image/gif", "image/webp", "image/*"]
+          "accept": ["image/*", "video/*", "video/mp4", "video/quicktime", "video/webm"]
         }
       ]
     }

@@ -6,7 +6,7 @@
   <title>MapIt – AI Travel Location Finder</title>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#4361ee">
-  <meta name="description" content="Screenshot a travel post – AI reads the image and opens Google Maps.">
+  <meta name="description" content="Share a travel video – AI finds the location and opens Google Maps.">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="MapIt">
@@ -15,7 +15,6 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #0a0a18;
       --card: rgba(255,255,255,0.04);
       --card-border: rgba(255,255,255,0.08);
       --primary: #4361ee;
@@ -24,7 +23,6 @@
       --accent: #f72585;
       --green: #06d6a0;
       --yellow: #ffd60a;
-      --red: #ef233c;
       --text: #e8e8f0;
       --text-muted: #8888aa;
       --input-bg: rgba(255,255,255,0.06);
@@ -45,56 +43,44 @@
 
     /* ─── Header ─── */
     header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      display: flex; align-items: center; justify-content: space-between;
       padding: 16px 20px 12px;
       padding-top: calc(16px + env(safe-area-inset-top, 0px));
     }
-
     .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-
     .logo-icon {
       width: 38px; height: 38px;
       background: linear-gradient(135deg, var(--primary), var(--purple));
-      border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 20px;
-      box-shadow: 0 4px 20px var(--primary-glow);
-      flex-shrink: 0;
+      border-radius: 10px; display: flex; align-items: center; justify-content: center;
+      font-size: 20px; box-shadow: 0 4px 20px var(--primary-glow); flex-shrink: 0;
     }
-
     .logo-text {
       font-size: 22px; font-weight: 800; letter-spacing: -0.5px;
       background: linear-gradient(135deg, #fff 0%, #aab4ff 100%);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
-
     .logo-tagline { font-size: 11px; color: var(--text-muted); font-weight: 500; }
-
     .header-btn {
       background: var(--card); border: 1px solid var(--card-border);
-      color: var(--text-muted); width: 40px; height: 40px;
-      border-radius: 10px; display: flex; align-items: center; justify-content: center;
+      color: var(--text-muted); width: 40px; height: 40px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
       cursor: pointer; transition: all 0.2s; font-size: 18px;
     }
-    .header-btn:hover, .header-btn:active { background: rgba(255,255,255,0.1); color: var(--text); }
+    .header-btn:hover { background: rgba(255,255,255,0.1); color: var(--text); }
 
     /* ─── Main ─── */
     main { max-width: 540px; margin: 0 auto; padding: 8px 16px 24px; }
 
-    /* ─── API Key Banner ─── */
+    /* ─── API Banner ─── */
     .api-banner {
       background: linear-gradient(135deg, rgba(247,37,133,0.15), rgba(114,9,183,0.15));
       border: 1px solid rgba(247,37,133,0.3);
       border-radius: var(--radius-sm); padding: 12px 14px; margin-bottom: 16px;
-      display: flex; align-items: center; gap: 10px; font-size: 13px; cursor: pointer; transition: opacity 0.2s;
+      display: flex; align-items: center; gap: 10px; font-size: 13px; cursor: pointer;
     }
-    .api-banner:hover { opacity: 0.85; }
     .api-banner.hidden { display: none; }
-    .api-banner-icon { font-size: 18px; flex-shrink: 0; }
-    .api-banner-text b { color: var(--accent); }
-    .api-banner-arrow { margin-left: auto; color: var(--accent); font-size: 14px; }
+    .api-banner b { color: var(--accent); }
+    .api-banner-arrow { margin-left: auto; color: var(--accent); }
 
     /* ─── Card ─── */
     .card {
@@ -102,120 +88,97 @@
       border-radius: var(--radius); padding: 20px; margin-bottom: 16px;
       backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
     }
-
     .card-title { font-size: 13px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 14px; }
 
-    /* ─── Image Upload ─── */
+    /* ─── Upload Area ─── */
     .upload-area {
-      border: 2px dashed rgba(255,255,255,0.15);
-      border-radius: var(--radius-sm);
-      padding: 28px 16px;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.2s;
-      position: relative;
-      overflow: hidden;
-      margin-bottom: 14px;
+      border: 2px dashed rgba(255,255,255,0.15); border-radius: var(--radius-sm);
+      padding: 30px 16px; text-align: center; cursor: pointer;
+      transition: all 0.2s; margin-bottom: 14px; position: relative; overflow: hidden;
     }
-    .upload-area:hover, .upload-area.dragover {
-      border-color: var(--primary);
-      background: rgba(67,97,238,0.07);
-    }
-    .upload-area.has-image {
-      border-color: rgba(6,214,160,0.4);
-      background: rgba(6,214,160,0.04);
-      padding: 10px;
-    }
+    .upload-area:hover, .upload-area.dragover { border-color: var(--primary); background: rgba(67,97,238,0.07); }
+    .upload-area.has-media { border-color: rgba(6,214,160,0.4); background: rgba(6,214,160,0.04); padding: 10px; }
+    .upload-area.has-media .upload-placeholder { display: none; }
 
-    .upload-placeholder { pointer-events: none; }
-    .upload-icon { font-size: 36px; margin-bottom: 10px; }
-    .upload-title { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
-    .upload-sub { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
-
-    .upload-area.has-image .upload-placeholder { display: none; }
-
-    .img-preview-wrap { display: none; position: relative; }
-    .upload-area.has-image .img-preview-wrap { display: block; }
-
-    .img-preview {
-      width: 100%; max-height: 220px; object-fit: contain;
-      border-radius: 8px; display: block;
-    }
-
-    .img-preview-label {
-      display: flex; align-items: center; gap: 6px;
-      font-size: 12px; color: var(--green); margin-top: 8px; font-weight: 600;
-    }
-
-    .remove-img-btn {
-      position: absolute; top: 4px; right: 4px;
-      background: rgba(0,0,0,0.6); border: none; color: white;
-      width: 26px; height: 26px; border-radius: 50%; font-size: 14px;
-      cursor: pointer; display: flex; align-items: center; justify-content: center;
-      transition: background 0.2s;
-    }
-    .remove-img-btn:hover { background: rgba(239,35,60,0.7); }
+    .upload-icon { font-size: 40px; margin-bottom: 10px; }
+    .upload-title { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+    .upload-sub { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+    .upload-sub span { display: inline-block; background: rgba(255,255,255,0.07); border-radius: 6px; padding: 2px 8px; margin: 2px; font-size: 11px; }
 
     input[type="file"] { display: none; }
 
+    /* ─── Media Preview ─── */
+    .media-preview-wrap { display: none; }
+    .upload-area.has-media .media-preview-wrap { display: block; position: relative; }
+
+    .media-preview-img { width: 100%; max-height: 220px; object-fit: contain; border-radius: 8px; display: block; }
+    .media-preview-video { width: 100%; max-height: 220px; border-radius: 8px; display: block; background: #000; }
+
+    .media-preview-label {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; color: var(--green); margin-top: 8px; font-weight: 600;
+    }
+    .media-preview-label .media-name { font-weight: 400; color: var(--text-muted); font-size: 11px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 200px; }
+
+    .remove-btn {
+      position: absolute; top: 4px; right: 4px;
+      background: rgba(0,0,0,0.65); border: none; color: white;
+      width: 28px; height: 28px; border-radius: 50%; font-size: 13px;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+    }
+    .remove-btn:hover { background: rgba(239,35,60,0.7); }
+
+    /* ─── Progress ─── */
+    .progress-wrap { display: none; margin-bottom: 14px; }
+    .progress-wrap.visible { display: block; }
+    .progress-bar { height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden; margin-bottom: 6px; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--purple)); border-radius: 3px; transition: width 0.3s; width: 0%; }
+    .progress-label { font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 6px; }
+    .progress-spinner {
+      width: 12px; height: 12px; border: 2px solid rgba(255,255,255,0.2); border-top-color: var(--primary);
+      border-radius: 50%; animation: spin 0.7s linear infinite; flex-shrink: 0;
+    }
+
     /* ─── Divider ─── */
     .or-divider {
-      display: flex; align-items: center; gap: 10px;
-      margin-bottom: 14px; color: var(--text-muted); font-size: 11px; font-weight: 600;
+      display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+      color: var(--text-muted); font-size: 11px; font-weight: 600; letter-spacing: 0.5px;
     }
-    .or-divider::before, .or-divider::after {
-      content: ''; flex: 1; height: 1px; background: var(--card-border);
-    }
+    .or-divider::before, .or-divider::after { content: ''; flex: 1; height: 1px; background: var(--card-border); }
 
     /* ─── Inputs ─── */
     .input-group { margin-bottom: 12px; }
+    .input-label { font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+    .badge { background: rgba(255,255,255,0.08); padding: 1px 7px; border-radius: 20px; font-size: 10px; font-weight: 500; }
 
-    .input-label {
-      font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px;
-      display: flex; align-items: center; gap: 6px;
-    }
-    .badge {
-      background: rgba(255,255,255,0.08); padding: 1px 7px; border-radius: 20px;
-      font-size: 10px; font-weight: 500;
-    }
-
-    input[type="text"], textarea {
+    textarea {
       width: 100%; background: var(--input-bg); border: 1px solid var(--card-border);
       border-radius: var(--radius-sm); color: var(--text); font-size: 14px;
-      font-family: inherit; padding: 12px 14px; transition: border-color 0.2s, box-shadow 0.2s;
-      -webkit-appearance: none;
+      font-family: inherit; padding: 12px 14px; resize: vertical; min-height: 72px; line-height: 1.5;
+      -webkit-appearance: none; transition: border-color 0.2s, box-shadow 0.2s;
     }
-    input[type="text"]:focus, textarea:focus {
-      outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-glow);
-    }
-    input::placeholder, textarea::placeholder { color: var(--text-muted); opacity: 0.7; }
-    textarea { resize: vertical; min-height: 72px; line-height: 1.5; }
+    textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-glow); }
+    textarea::placeholder { color: var(--text-muted); opacity: 0.7; }
 
     /* ─── Analyze Button ─── */
     .analyze-btn {
-      width: 100%;
-      background: linear-gradient(135deg, var(--primary), var(--purple));
+      width: 100%; background: linear-gradient(135deg, var(--primary), var(--purple));
       border: none; border-radius: var(--radius-sm); color: white;
       font-size: 15px; font-weight: 700; padding: 14px; cursor: pointer;
       display: flex; align-items: center; justify-content: center; gap: 8px;
       transition: transform 0.15s, box-shadow 0.2s, opacity 0.2s;
-      box-shadow: 0 4px 24px rgba(67,97,238,0.4);
-      -webkit-appearance: none; font-family: inherit; letter-spacing: 0.2px;
+      box-shadow: 0 4px 24px rgba(67,97,238,0.4); font-family: inherit; -webkit-appearance: none;
     }
     .analyze-btn:hover { box-shadow: 0 6px 32px rgba(67,97,238,0.55); transform: translateY(-1px); }
     .analyze-btn:active { transform: translateY(0); }
     .analyze-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-    .btn-spinner {
-      width: 16px; height: 16px;
-      border: 2px solid rgba(255,255,255,0.3); border-top-color: white;
-      border-radius: 50%; animation: spin 0.7s linear infinite; display: none;
-    }
+    .btn-spinner { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; display: none; }
     .analyzing .btn-spinner { display: block; }
     .analyzing .btn-icon { display: none; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ─── Result Card ─── */
+    /* ─── Result ─── */
     .result-card {
       background: linear-gradient(135deg, rgba(6,214,160,0.08), rgba(67,97,238,0.08));
       border: 1px solid rgba(6,214,160,0.25);
@@ -223,54 +186,40 @@
       animation: slideUp 0.35s ease; display: none;
     }
     .result-card.visible { display: block; }
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(16px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 
     .result-header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
-
     .result-pin {
-      width: 44px; height: 44px;
-      background: linear-gradient(135deg, var(--green), #00b4d8);
+      width: 44px; height: 44px; background: linear-gradient(135deg, var(--green), #00b4d8);
       border-radius: 12px; display: flex; align-items: center; justify-content: center;
       font-size: 22px; flex-shrink: 0; box-shadow: 0 4px 16px rgba(6,214,160,0.35);
     }
-
     .result-location { flex: 1; min-width: 0; }
-    .result-location-name { font-size: 18px; font-weight: 700; color: white; line-height: 1.3; margin-bottom: 4px; }
-
-    .result-confidence {
+    .result-name { font-size: 18px; font-weight: 700; color: white; line-height: 1.3; margin-bottom: 4px; }
+    .result-conf {
       display: inline-flex; align-items: center; gap: 4px;
       font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 20px;
     }
-    .confidence-high   { background: rgba(6,214,160,0.15);  color: var(--green);  border: 1px solid rgba(6,214,160,0.3); }
-    .confidence-medium { background: rgba(255,214,10,0.12); color: var(--yellow); border: 1px solid rgba(255,214,10,0.3); }
-    .confidence-low    { background: rgba(239,35,60,0.12);  color: #ff8fa3;       border: 1px solid rgba(239,35,60,0.25); }
-
-    .result-note {
-      font-size: 13px; color: var(--text-muted); line-height: 1.5;
-      padding: 10px 12px; background: rgba(255,255,255,0.03);
-      border-radius: var(--radius-sm); margin-bottom: 14px; font-style: italic;
-    }
+    .conf-high   { background: rgba(6,214,160,0.15);  color: var(--green);  border: 1px solid rgba(6,214,160,0.3); }
+    .conf-medium { background: rgba(255,214,10,0.12); color: var(--yellow); border: 1px solid rgba(255,214,10,0.3); }
+    .conf-low    { background: rgba(239,35,60,0.12);  color: #ff8fa3;       border: 1px solid rgba(239,35,60,0.25); }
+    .result-note { font-size: 13px; color: var(--text-muted); line-height: 1.5; padding: 10px 12px; background: rgba(255,255,255,0.03); border-radius: var(--radius-sm); margin-bottom: 14px; font-style: italic; }
 
     .maps-btn {
-      width: 100%;
-      background: linear-gradient(135deg, var(--green), #00b4d8);
+      width: 100%; background: linear-gradient(135deg, var(--green), #00b4d8);
       border: none; border-radius: var(--radius-sm); color: #0a1a14;
       font-size: 15px; font-weight: 800; padding: 14px; cursor: pointer;
       display: flex; align-items: center; justify-content: center; gap: 8px;
       transition: all 0.2s; box-shadow: 0 4px 20px rgba(6,214,160,0.35);
-      font-family: inherit; -webkit-appearance: none; letter-spacing: 0.2px;
+      font-family: inherit; -webkit-appearance: none;
     }
     .maps-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 28px rgba(6,214,160,0.5); }
-    .maps-btn:active { transform: translateY(0); }
 
-    /* ─── Error Card ─── */
+    /* ─── Error ─── */
     .error-card {
       background: rgba(239,35,60,0.08); border: 1px solid rgba(239,35,60,0.25);
       border-radius: var(--radius); padding: 16px 18px; margin-bottom: 16px;
-      display: none; font-size: 13px; line-height: 1.5; animation: slideUp 0.3s ease;
+      display: none; font-size: 13px; line-height: 1.6; animation: slideUp 0.3s ease;
     }
     .error-card.visible { display: block; }
     .error-card strong { color: #ff8fa3; }
@@ -278,70 +227,54 @@
     /* ─── Install Banner ─── */
     .install-banner {
       background: linear-gradient(135deg, rgba(67,97,238,0.12), rgba(114,9,183,0.12));
-      border: 1px solid rgba(67,97,238,0.25);
-      border-radius: var(--radius); padding: 14px 16px; margin-bottom: 16px;
-      font-size: 12.5px; line-height: 1.6; color: var(--text-muted);
+      border: 1px solid rgba(67,97,238,0.25); border-radius: var(--radius);
+      padding: 14px 16px; margin-bottom: 16px; font-size: 12.5px; line-height: 1.6; color: var(--text-muted);
     }
     .install-banner.hidden { display: none; }
     .install-banner strong { color: #aab4ff; }
-    .install-steps li { list-style: none; padding: 2px 0; }
+    .install-banner ol { padding-left: 4px; }
+    .install-banner li { list-style: none; padding: 2px 0; }
 
     /* ─── Tips ─── */
-    .tips-card {
-      background: var(--card); border: 1px solid var(--card-border);
-      border-radius: var(--radius); padding: 16px 18px; margin-bottom: 16px;
-    }
-    .tips-title {
-      font-size: 12px; font-weight: 700; color: var(--text-muted);
-      text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 10px;
-    }
-    .tip-item {
-      display: flex; align-items: flex-start; gap: 8px;
-      font-size: 12.5px; color: var(--text-muted); line-height: 1.5;
-      padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.04);
-    }
+    .tips-card { background: var(--card); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 16px 18px; margin-bottom: 16px; }
+    .tips-title { font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 10px; }
+    .tip-item { display: flex; align-items: flex-start; gap: 8px; font-size: 12.5px; color: var(--text-muted); line-height: 1.5; padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
     .tip-item:last-child { border-bottom: none; }
-    .tip-icon { flex-shrink: 0; margin-top: 1px; }
 
     /* ─── Settings Modal ─── */
     .modal-overlay {
       position: fixed; inset: 0; background: rgba(0,0,0,0.7);
       backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
       z-index: 100; display: flex; align-items: flex-end; justify-content: center;
-      padding: 0 0 env(safe-area-inset-bottom, 0px);
+      padding-bottom: env(safe-area-inset-bottom, 0px);
       opacity: 0; pointer-events: none; transition: opacity 0.25s;
     }
     .modal-overlay.open { opacity: 1; pointer-events: all; }
-
     .modal {
       background: #1a1a2e; border: 1px solid var(--card-border);
       border-radius: 20px 20px 0 0; width: 100%; max-width: 540px;
-      padding: 0 20px 32px;
-      transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.32,0.72,0,1);
-      max-height: 90vh; overflow-y: auto;
+      padding: 0 20px 32px; transform: translateY(100%);
+      transition: transform 0.3s cubic-bezier(0.32,0.72,0,1); max-height: 90vh; overflow-y: auto;
     }
     .modal-overlay.open .modal { transform: translateY(0); }
-
     .modal-handle { width: 36px; height: 4px; background: rgba(255,255,255,0.2); border-radius: 2px; margin: 12px auto 20px; }
-    .modal-title  { font-size: 18px; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+    .modal-title { font-size: 18px; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
     .modal-section { margin-bottom: 20px; }
-    .modal-label  { font-size: 13px; font-weight: 600; color: var(--text-muted); margin-bottom: 8px; display: block; }
+    .modal-label { font-size: 13px; font-weight: 600; color: var(--text-muted); margin-bottom: 8px; display: block; }
+    .key-wrap { position: relative; display: flex; align-items: center; }
 
-    .key-input-wrap { position: relative; display: flex; align-items: center; }
-
-    input[type="password"] {
+    input[type="password"], input[type="text"].key-field {
       width: 100%; background: var(--input-bg); border: 1px solid var(--card-border);
       border-radius: var(--radius-sm); color: var(--text);
-      font-family: 'SF Mono','Fira Code',monospace; font-size: 13px; letter-spacing: 0.5px;
+      font-family: 'SF Mono', 'Fira Code', monospace; font-size: 13px; letter-spacing: 0.5px;
       padding: 12px 44px 12px 14px; -webkit-appearance: none;
       transition: border-color 0.2s, box-shadow 0.2s;
     }
-    input[type="password"]:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-glow); }
+    input[type="password"]:focus, input[type="text"].key-field:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-glow); }
 
-    .toggle-key-btn {
-      position: absolute; right: 12px; background: none; border: none;
-      color: var(--text-muted); cursor: pointer; font-size: 16px; padding: 4px;
-    }
+    .toggle-key { position: absolute; right: 12px; background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 16px; padding: 4px; }
+    .api-key-link { font-size: 12px; color: var(--primary); text-decoration: none; display: inline-flex; align-items: center; gap: 4px; margin-top: 6px; }
+    .api-key-link:hover { text-decoration: underline; }
 
     .model-select {
       width: 100%; background: var(--input-bg); border: 1px solid var(--card-border);
@@ -355,17 +288,11 @@
       width: 100%; background: linear-gradient(135deg, var(--primary), var(--purple));
       border: none; border-radius: var(--radius-sm); color: white;
       font-size: 14px; font-weight: 700; padding: 13px; cursor: pointer;
-      font-family: inherit; transition: all 0.2s; box-shadow: 0 4px 20px var(--primary-glow);
-      -webkit-appearance: none;
+      font-family: inherit; box-shadow: 0 4px 20px var(--primary-glow); -webkit-appearance: none;
     }
-    .save-btn:hover { opacity: 0.9; }
-
     .save-feedback { text-align: center; font-size: 13px; color: var(--green); margin-top: 10px; min-height: 20px; }
-    .api-key-link { font-size: 12px; color: var(--primary); text-decoration: none; display: inline-flex; align-items: center; gap: 4px; margin-top: 6px; }
-    .api-key-link:hover { text-decoration: underline; }
-
     .modal-divider { height: 1px; background: var(--card-border); margin: 20px 0; }
-    .modal-info-row { display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: var(--text-muted); padding: 6px 0; }
+    .modal-row { display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: var(--text-muted); padding: 6px 0; }
 
     footer { text-align: center; padding: 8px 20px 16px; font-size: 11px; color: var(--text-muted); opacity: 0.5; }
 
@@ -386,45 +313,51 @@
         <div class="logo-tagline">AI Travel Location Finder</div>
       </div>
     </a>
-    <button class="header-btn" id="settingsBtn" title="Settings" aria-label="Settings">⚙️</button>
+    <button class="header-btn" id="settingsBtn" title="Settings">⚙️</button>
   </header>
 
   <main>
     <div class="api-banner hidden" id="apiBanner">
-      <span class="api-banner-icon">🔑</span>
-      <span class="api-banner-text"><b>Add your Gemini API key</b> in Settings to get started</span>
+      <span>🔑</span>
+      <span><b>Add your Gemini API key</b> in Settings to get started</span>
       <span class="api-banner-arrow">›</span>
     </div>
 
     <!-- Input card -->
     <div class="card">
-      <div class="card-title">📸 Screenshot or photo</div>
+      <div class="card-title">🎬 Video or screenshot</div>
 
-      <!-- Image upload area -->
-      <div class="upload-area" id="uploadArea" role="button" tabindex="0" aria-label="Upload image">
+      <div class="upload-area" id="uploadArea" role="button" tabindex="0" aria-label="Upload video or image">
         <div class="upload-placeholder">
-          <div class="upload-icon">🖼️</div>
-          <div class="upload-title">Tap to add a screenshot</div>
-          <div class="upload-sub">Take a screenshot of the Instagram/Facebook post or video<br>and upload it here</div>
+          <div class="upload-icon">🎬</div>
+          <div class="upload-title">Tap to upload</div>
+          <div class="upload-sub">
+            Travel video, reel, or screenshot<br>
+            <span>MP4</span><span>MOV</span><span>JPG/PNG</span>
+          </div>
         </div>
-        <div class="img-preview-wrap">
-          <img class="img-preview" id="imgPreview" alt="Selected image">
-          <button class="remove-img-btn" id="removeImgBtn" type="button" title="Remove image">✕</button>
-          <div class="img-preview-label">✓ Image ready to analyze</div>
+        <div class="media-preview-wrap">
+          <img  class="media-preview-img"   id="imgPreview"   alt="" style="display:none">
+          <video class="media-preview-video" id="videoPreview" controls playsinline style="display:none"></video>
+          <button class="remove-btn" id="removeBtn" type="button">✕</button>
+          <div class="media-preview-label">
+            ✓ Ready &nbsp;<span class="media-name" id="mediaName"></span>
+          </div>
         </div>
       </div>
-      <input type="file" id="fileInput" accept="image/*">
+      <input type="file" id="fileInput" accept="image/*,video/*,video/mp4,video/quicktime,video/webm">
 
-      <div class="or-divider">OR add text</div>
+      <!-- Upload progress (video only) -->
+      <div class="progress-wrap" id="progressWrap">
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="progress-label"><div class="progress-spinner"></div><span id="progressLabel">Uploading…</span></div>
+      </div>
 
-      <!-- Optional text -->
+      <div class="or-divider">or add caption text</div>
+
       <div class="input-group">
-        <div class="input-label">Paste caption / any text from the post <span class="badge">optional</span></div>
-        <textarea
-          id="textInput"
-          placeholder="e.g. &quot;Just visited this hidden gem in Santorini! 🌅 #greece #travel&quot;"
-          rows="3"
-        ></textarea>
+        <div class="input-label">Caption / description <span class="badge">optional</span></div>
+        <textarea id="textInput" rows="3" placeholder='e.g. "This hidden gem in Santorini is unreal 🌅 #greece #travel"'></textarea>
       </div>
 
       <button class="analyze-btn" id="analyzeBtn" type="button">
@@ -441,45 +374,31 @@
       <div class="result-header">
         <div class="result-pin">📍</div>
         <div class="result-location">
-          <div class="result-location-name" id="resultName">—</div>
-          <span class="result-confidence" id="resultConfidence"></span>
+          <div class="result-name" id="resultName">—</div>
+          <span class="result-conf" id="resultConf"></span>
         </div>
       </div>
       <div class="result-note" id="resultNote"></div>
-      <button class="maps-btn" id="mapsBtn" type="button">
-        🗺️ Open in Google Maps
-      </button>
+      <button class="maps-btn" id="mapsBtn" type="button">🗺️ Open in Google Maps</button>
     </div>
 
     <!-- iOS install banner -->
     <div class="install-banner hidden" id="installBanner">
-      <strong>📱 Use as an iOS share target</strong>
-      <ol class="install-steps">
+      <strong>📱 Share videos directly from your phone</strong>
+      <ol>
         <li>1. Open this page in <strong>Safari</strong></li>
-        <li>2. Tap <strong>Share ⬆</strong> → <strong>"Add to Home Screen"</strong></li>
-        <li>3. Screenshot an Instagram/Facebook post, then tap <strong>Share → MapIt</strong> — it auto-analyzes!</li>
+        <li>2. Tap <strong>Share ⬆</strong> → <strong>Add to Home Screen</strong></li>
+        <li>3. In Photos or Instagram, tap <strong>Share → MapIt</strong> — it auto-analyzes!</li>
       </ol>
     </div>
 
     <!-- Tips -->
     <div class="tips-card">
       <div class="tips-title">💡 How to use</div>
-      <div class="tip-item">
-        <span class="tip-icon">1️⃣</span>
-        <span>Screenshot the Instagram/Facebook post or video that shows the travel destination</span>
-      </div>
-      <div class="tip-item">
-        <span class="tip-icon">2️⃣</span>
-        <span>Tap the upload area above, select your screenshot, then tap <strong>Find Location</strong></span>
-      </div>
-      <div class="tip-item">
-        <span class="tip-icon">3️⃣</span>
-        <span>Tap <strong>Open in Google Maps</strong> → tap <strong>Save ♡</strong> to add to your lists</span>
-      </div>
-      <div class="tip-item">
-        <span class="tip-icon">📱</span>
-        <span>Install as an app (Add to Home Screen in Safari) to share screenshots directly from Photos</span>
-      </div>
+      <div class="tip-item"><span>1️⃣</span><span>Save or screen-record the travel video/reel from Instagram or Facebook</span></div>
+      <div class="tip-item"><span>2️⃣</span><span>Tap the upload area, pick the video — Gemini watches it and extracts the location</span></div>
+      <div class="tip-item"><span>3️⃣</span><span>Tap <strong>Open in Google Maps</strong> → <strong>Save ♡</strong> to add to your lists</span></div>
+      <div class="tip-item"><span>📱</span><span>Install as a PWA (Add to Home Screen in Safari) to share videos directly from Photos</span></div>
     </div>
   </main>
 
@@ -487,15 +406,15 @@
 
   <!-- Settings Modal -->
   <div class="modal-overlay" id="modalOverlay">
-    <div class="modal" role="dialog" aria-label="Settings">
+    <div class="modal">
       <div class="modal-handle"></div>
       <div class="modal-title">⚙️ Settings</div>
 
       <div class="modal-section">
         <label class="modal-label" for="apiKeyInput">Gemini API Key</label>
-        <div class="key-input-wrap">
-          <input type="password" id="apiKeyInput" placeholder="AIza..." autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false">
-          <button class="toggle-key-btn" id="toggleKeyBtn" type="button" title="Show/hide key">👁</button>
+        <div class="key-wrap">
+          <input type="password" id="apiKeyInput" placeholder="AIza…" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false">
+          <button class="toggle-key" id="toggleKey" type="button">👁</button>
         </div>
         <a class="api-key-link" href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener">🔑 Get a free Gemini API key ↗</a>
       </div>
@@ -510,33 +429,36 @@
         </select>
       </div>
 
-      <button class="save-btn" id="saveSettingsBtn" type="button">Save Settings</button>
+      <button class="save-btn" id="saveBtn" type="button">Save Settings</button>
       <div class="save-feedback" id="saveFeedback"></div>
 
       <div class="modal-divider"></div>
-      <div class="modal-info-row"><span>API key stored only on this device</span></div>
-      <div class="modal-info-row"><span>Version</span><span>2.0.0</span></div>
+      <div class="modal-row"><span>API key stored only on this device</span></div>
+      <div class="modal-row"><span>Version</span><span>3.0.0</span></div>
     </div>
   </div>
 
   <script>
     const STORAGE_KEY = 'mapit_api_key';
     const MODEL_KEY   = 'mapit_model';
-    let currentMapsUrl = null;
-    let currentImageFile = null;
+    let mapsUrl      = null;
+    let currentFile  = null;
+    let analyzing    = false;
 
     // DOM
     const uploadArea    = document.getElementById('uploadArea');
     const fileInput     = document.getElementById('fileInput');
     const imgPreview    = document.getElementById('imgPreview');
-    const removeImgBtn  = document.getElementById('removeImgBtn');
+    const videoPreview  = document.getElementById('videoPreview');
+    const removeBtn     = document.getElementById('removeBtn');
+    const mediaName     = document.getElementById('mediaName');
     const textInput     = document.getElementById('textInput');
     const analyzeBtn    = document.getElementById('analyzeBtn');
     const btnLabel      = analyzeBtn.querySelector('.btn-label');
     const errorCard     = document.getElementById('errorCard');
     const resultCard    = document.getElementById('resultCard');
     const resultName    = document.getElementById('resultName');
-    const resultConf    = document.getElementById('resultConfidence');
+    const resultConf    = document.getElementById('resultConf');
     const resultNote    = document.getElementById('resultNote');
     const mapsBtn       = document.getElementById('mapsBtn');
     const apiBanner     = document.getElementById('apiBanner');
@@ -544,92 +466,93 @@
     const modalOverlay  = document.getElementById('modalOverlay');
     const apiKeyInput   = document.getElementById('apiKeyInput');
     const modelSelect   = document.getElementById('modelSelect');
-    const saveBtn       = document.getElementById('saveSettingsBtn');
+    const saveBtn       = document.getElementById('saveBtn');
     const saveFeedback  = document.getElementById('saveFeedback');
-    const toggleKeyBtn  = document.getElementById('toggleKeyBtn');
+    const toggleKey     = document.getElementById('toggleKey');
     const installBanner = document.getElementById('installBanner');
+    const progressWrap  = document.getElementById('progressWrap');
+    const progressFill  = document.getElementById('progressFill');
+    const progressLabel = document.getElementById('progressLabel');
 
     // ─── Init ─────────────────────────────────────────────────────────────────
     async function init() {
-      registerSW();
+      if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(() => {});
       loadSettings();
-      showInstallBannerIfNeeded();
+      showInstallBanner();
 
-      // Wire events
-      uploadArea.addEventListener('click', () => fileInput.click());
-      uploadArea.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') fileInput.click(); });
-      fileInput.addEventListener('change', e => { if (e.target.files[0]) setImageFile(e.target.files[0]); });
-      removeImgBtn.addEventListener('click', e => { e.stopPropagation(); clearImage(); });
-
-      // Drag & drop
+      uploadArea.addEventListener('click', () => { if (!analyzing) fileInput.click(); });
+      uploadArea.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && !analyzing) fileInput.click(); });
       uploadArea.addEventListener('dragover', e => { e.preventDefault(); uploadArea.classList.add('dragover'); });
       uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('dragover'));
       uploadArea.addEventListener('drop', e => {
         e.preventDefault(); uploadArea.classList.remove('dragover');
-        const file = e.dataTransfer.files[0];
-        if (file && file.type.startsWith('image/')) setImageFile(file);
+        const f = e.dataTransfer.files[0];
+        if (f) setFile(f);
       });
+      fileInput.addEventListener('change', e => { if (e.target.files[0]) setFile(e.target.files[0]); });
+      removeBtn.addEventListener('click', e => { e.stopPropagation(); clearFile(); });
 
       analyzeBtn.addEventListener('click', handleAnalyze);
-      mapsBtn.addEventListener('click', () => { if (currentMapsUrl) window.open(currentMapsUrl, '_blank'); });
+      mapsBtn.addEventListener('click', () => { if (mapsUrl) window.open(mapsUrl, '_blank'); });
       settingsBtn.addEventListener('click', openModal);
       modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) closeModal(); });
       saveBtn.addEventListener('click', saveSettings);
-      toggleKeyBtn.addEventListener('click', toggleKeyVisibility);
+      toggleKey.addEventListener('click', () => {
+        const show = apiKeyInput.type === 'password';
+        apiKeyInput.type = show ? 'text' : 'password';
+        toggleKey.textContent = show ? '🙈' : '👁';
+      });
       apiBanner.addEventListener('click', openModal);
 
-      // Check for image shared via iOS share sheet (POST share target → cached by SW)
       await checkPendingShare();
     }
 
-    function registerSW() {
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('./sw.js').catch(() => {});
-      }
-    }
-
-    // ─── Image handling ────────────────────────────────────────────────────────
-    function setImageFile(file) {
-      currentImageFile = file;
+    // ─── File handling ─────────────────────────────────────────────────────────
+    function setFile(file) {
+      currentFile = file;
+      const isVideo = file.type.startsWith('video/') || /\.(mp4|mov|avi|webm|mkv)$/i.test(file.name);
       const url = URL.createObjectURL(file);
-      imgPreview.src = url;
-      uploadArea.classList.add('has-image');
+
+      if (isVideo) {
+        videoPreview.src = url;
+        videoPreview.style.display = 'block';
+        imgPreview.style.display = 'none';
+      } else {
+        imgPreview.src = url;
+        imgPreview.style.display = 'block';
+        videoPreview.style.display = 'none';
+      }
+
+      const sizeStr = file.size > 1e6 ? `${(file.size / 1e6).toFixed(1)} MB` : `${Math.round(file.size / 1024)} KB`;
+      mediaName.textContent = `${file.name || 'file'} · ${sizeStr}`;
+      uploadArea.classList.add('has-media');
       hideResults();
     }
 
-    function clearImage() {
-      currentImageFile = null;
-      imgPreview.src = '';
-      uploadArea.classList.remove('has-image');
+    function clearFile() {
+      currentFile = null;
+      imgPreview.src = ''; imgPreview.style.display = 'none';
+      videoPreview.src = ''; videoPreview.style.display = 'none';
+      uploadArea.classList.remove('has-media');
       fileInput.value = '';
+      progressWrap.classList.remove('visible');
     }
 
-    // ─── Pending share (iOS share sheet → SW cached the file) ─────────────────
+    // ─── Pending share (iOS share → SW cached it) ──────────────────────────────
     async function checkPendingShare() {
       if (!('caches' in window)) return;
       try {
-        const pending = await caches.open('mapit-pending');
-        const [metaRes, fileRes] = await Promise.all([
-          pending.match('meta'),
-          pending.match('file')
-        ]);
+        const cache = await caches.open('mapit-pending');
+        const [metaRes, fileRes] = await Promise.all([cache.match('meta'), cache.match('file')]);
         if (!metaRes && !fileRes) return;
-
-        // Clean up immediately
-        await Promise.all([pending.delete('meta'), pending.delete('file')]);
-
+        await Promise.all([cache.delete('meta'), cache.delete('file')]);
         const meta = metaRes ? await metaRes.json() : {};
         const text = [meta.title, meta.text].filter(Boolean).join('\n');
         if (text) textInput.value = text;
-
         if (fileRes) {
           const blob = await fileRes.blob();
-          if (blob.size > 0) {
-            const file = new File([blob], 'shared.jpg', { type: blob.type || 'image/jpeg' });
-            setImageFile(file);
-          }
+          if (blob.size > 0) setFile(new File([blob], 'shared', { type: blob.type || 'video/mp4' }));
         }
-
         setTimeout(handleAnalyze, 400);
       } catch (_) {}
     }
@@ -645,29 +568,20 @@
     }
 
     function saveSettings() {
-      const key   = apiKeyInput.value.trim();
-      const model = modelSelect.value;
-      localStorage.setItem(STORAGE_KEY, key);
-      localStorage.setItem(MODEL_KEY, model);
-      apiBanner.classList.toggle('hidden', !!key);
+      localStorage.setItem(STORAGE_KEY, apiKeyInput.value.trim());
+      localStorage.setItem(MODEL_KEY, modelSelect.value);
+      apiBanner.classList.toggle('hidden', !!apiKeyInput.value.trim());
       saveFeedback.textContent = '✅ Saved!';
       setTimeout(() => { saveFeedback.textContent = ''; }, 2500);
-    }
-
-    function toggleKeyVisibility() {
-      const isPass = apiKeyInput.type === 'password';
-      apiKeyInput.type = isPass ? 'text' : 'password';
-      toggleKeyBtn.textContent = isPass ? '🙈' : '👁';
     }
 
     function openModal()  { modalOverlay.classList.add('open'); }
     function closeModal() { modalOverlay.classList.remove('open'); }
 
-    // ─── Install Banner ────────────────────────────────────────────────────────
-    function showInstallBannerIfNeeded() {
-      const isStandalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
-      const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-      if (isIOS && !isStandalone) installBanner.classList.remove('hidden');
+    function showInstallBanner() {
+      const standalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+      if (/iphone|ipad|ipod/i.test(navigator.userAgent) && !standalone)
+        installBanner.classList.remove('hidden');
     }
 
     // ─── Analyze ──────────────────────────────────────────────────────────────
@@ -676,30 +590,39 @@
       if (!apiKey) { openModal(); showError('Please add your Gemini API key in Settings first.'); return; }
 
       const text = textInput.value.trim();
-
-      if (!currentImageFile && !text) {
-        showError('Please add a screenshot of the post, or paste some text from it.');
+      if (!currentFile && !text) {
+        showError('Please upload a video or screenshot (or paste some caption text).');
         return;
       }
 
+      analyzing = true;
       setAnalyzing(true);
       hideResults();
 
       try {
         const model = localStorage.getItem(MODEL_KEY) || 'gemini-2.5-flash';
-        const result = currentImageFile
-          ? await analyzeImage(currentImageFile, text, apiKey, model)
-          : await analyzeText(text, apiKey, model);
+        let result;
+
+        if (currentFile) {
+          const isVideo = currentFile.type.startsWith('video/') || /\.(mp4|mov|avi|webm|mkv)$/i.test(currentFile.name);
+          result = isVideo
+            ? await analyzeViaFileAPI(currentFile, text, apiKey, model)
+            : await analyzeImageInline(currentFile, text, apiKey, model);
+        } else {
+          result = await analyzeTextOnly(text, apiKey, model);
+        }
 
         if (result.found) {
           showResult(result);
         } else {
-          showError(`No location found. ${result.note || ''}<br><br>Try adding a clearer screenshot that shows the location name or a recognizable landmark.`);
+          showError(`No location found. ${result.note || ''}<br><br>Try a clip that shows a recognizable landmark, a sign, or includes the location name in the video.`);
         }
       } catch (err) {
         showError(`Error: ${err.message}`);
       } finally {
+        analyzing = false;
         setAnalyzing(false);
+        progressWrap.classList.remove('visible');
       }
     }
 
@@ -709,76 +632,152 @@
       btnLabel.textContent = on ? 'Analyzing…' : 'Find Location';
     }
 
-    // ─── Image analysis ────────────────────────────────────────────────────────
-    async function analyzeImage(file, extraText, apiKey, model) {
-      const base64 = await fileToBase64(file);
-      const mimeType = file.type || 'image/jpeg';
+    function setProgress(pct, label) {
+      progressWrap.classList.add('visible');
+      progressFill.style.width = `${Math.round(pct * 100)}%`;
+      progressLabel.textContent = label;
+    }
 
-      const textPart = `You are a travel location extractor. The user has shared a screenshot of a social media post (Instagram/Facebook) or a video frame/photo showing a travel destination.
+    // ─── Video via Gemini File API ─────────────────────────────────────────────
+    async function analyzeViaFileAPI(file, extraText, apiKey, model) {
+      // Step 1: initiate resumable upload
+      setProgress(0, 'Starting upload…');
+      const initRes = await fetch(
+        `https://generativelanguage.googleapis.com/upload/v1beta/files?key=${apiKey}`,
+        {
+          method: 'POST',
+          headers: {
+            'X-Goog-Upload-Protocol': 'resumable',
+            'X-Goog-Upload-Command': 'start',
+            'X-Goog-Upload-Header-Content-Length': String(file.size),
+            'X-Goog-Upload-Header-Content-Type': file.type || 'video/mp4',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ file: { display_name: file.name || 'video' } })
+        }
+      );
 
-Your task:
-1. Look at the image carefully and identify the travel destination, place, restaurant, hotel, landmark, or attraction being shown or recommended.
-2. Use visual clues (landscape, architecture, text in the image, signs, hashtags, captions visible in the screenshot).
-3. Prefer the most specific location possible.
-${extraText ? `\nAdditional text from the post: "${extraText}"` : ''}
+      if (!initRes.ok) {
+        const e = await initRes.json().catch(() => ({}));
+        const msg = e?.error?.message || `HTTP ${initRes.status}`;
+        if (initRes.status === 400 && msg.toLowerCase().includes('api key')) throw new Error('Invalid API key. Check Settings.');
+        throw new Error(`Upload init failed: ${msg}`);
+      }
 
-Do NOT attempt to access any URLs. Only analyze what you can see.
+      const uploadUrl = initRes.headers.get('X-Goog-Upload-URL');
+      if (!uploadUrl) throw new Error('No upload URL returned. Check your API key.');
 
-Respond with ONLY a raw JSON object (no markdown, no code fences):
-{"found":true,"location":"Full location name","query":"Google Maps search query","confidence":"high|medium|low","note":"One sentence explaining what visual clue you used"}
+      // Step 2: upload with XHR so we get progress
+      const uploadData = await new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', uploadUrl);
+        xhr.setRequestHeader('X-Goog-Upload-Command', 'upload, finalize');
+        xhr.setRequestHeader('X-Goog-Upload-Offset', '0');
+        xhr.setRequestHeader('Content-Type', file.type || 'video/mp4');
+        xhr.upload.addEventListener('progress', e => {
+          if (e.lengthComputable) setProgress(e.loaded / e.total * 0.8, `Uploading video… ${Math.round(e.loaded / e.total * 100)}%`);
+        });
+        xhr.addEventListener('load', () => {
+          if (xhr.status >= 200 && xhr.status < 300) resolve(JSON.parse(xhr.responseText));
+          else reject(new Error(`Upload failed: ${xhr.status}`));
+        });
+        xhr.addEventListener('error', () => reject(new Error('Network error during upload')));
+        xhr.send(file);
+      });
 
-If no location can be identified:
-{"found":false,"note":"Brief reason why"}`;
+      // Step 3: wait for Gemini to process the video
+      setProgress(0.85, 'Processing video…');
+      const fileInfo = await pollUntilActive(uploadData.file.name, apiKey);
 
+      // Step 4: analyze with Gemini
+      setProgress(0.95, 'Analyzing with AI…');
+      const prompt = buildMediaPrompt(extraText);
       const body = {
-        contents: [{
-          parts: [
-            { inline_data: { mime_type: mimeType, data: base64 } },
-            { text: textPart }
-          ]
-        }],
+        contents: [{ parts: [
+          { file_data: { mime_type: fileInfo.mimeType, file_uri: fileInfo.uri } },
+          { text: prompt }
+        ]}],
         generationConfig: { temperature: 0.1, maxOutputTokens: 512 }
       };
-
       return callGemini(body, apiKey, model);
     }
 
-    // ─── Text-only analysis ────────────────────────────────────────────────────
-    async function analyzeText(userText, apiKey, model) {
-      const prompt = `You are a travel location extractor. Analyze this social media post caption and identify the travel destination being featured.
+    async function pollUntilActive(fileName, apiKey, maxWait = 120000) {
+      const deadline = Date.now() + maxWait;
+      while (Date.now() < deadline) {
+        const res  = await fetch(`https://generativelanguage.googleapis.com/v1beta/${fileName}?key=${apiKey}`);
+        const data = await res.json();
+        if (data.state === 'ACTIVE') return data;
+        if (data.state === 'FAILED') throw new Error('Gemini failed to process the video. Try a shorter clip.');
+        await new Promise(r => setTimeout(r, 3000));
+      }
+      throw new Error('Video processing timed out. Try a shorter clip (under 30s).');
+    }
+
+    // ─── Image via inline base64 ───────────────────────────────────────────────
+    async function analyzeImageInline(file, extraText, apiKey, model) {
+      const base64 = await toBase64(file);
+      const prompt = buildMediaPrompt(extraText);
+      const body = {
+        contents: [{ parts: [
+          { inline_data: { mime_type: file.type || 'image/jpeg', data: base64 } },
+          { text: prompt }
+        ]}],
+        generationConfig: { temperature: 0.1, maxOutputTokens: 512 }
+      };
+      return callGemini(body, apiKey, model);
+    }
+
+    // ─── Text only ────────────────────────────────────────────────────────────
+    async function analyzeTextOnly(text, apiKey, model) {
+      const prompt = `You are a travel location extractor. Analyze this social media post caption and identify the travel destination being featured or recommended.
 
 Post text:
 """
-${userText}
+${text}
 """
 
-Look for: place names, city/country names, landmark names, location hashtags (#paris, #santorini, etc.), or any geographic context.
+Look for: place names, city/country names, landmark names, location hashtags (#paris, #santorini, etc.), or geographic context.
 Do NOT attempt to access any URLs.
 
-Respond with ONLY a raw JSON object (no markdown, no code fences):
-{"found":true,"location":"Full location name","query":"Google Maps search query","confidence":"high|medium|low","note":"One sentence explaining what clue you used"}
+Respond with ONLY raw JSON (no markdown):
+{"found":true,"location":"Full name","query":"Google Maps query","confidence":"high|medium|low","note":"What clue you used"}
 
-If no location can be identified:
-{"found":false,"note":"Brief reason why"}`;
+If no location found: {"found":false,"note":"Reason"}`;
 
       const body = {
         contents: [{ parts: [{ text: prompt }] }],
         generationConfig: { temperature: 0.1, maxOutputTokens: 512, responseMimeType: 'application/json' }
       };
-
       return callGemini(body, apiKey, model);
     }
 
-    // ─── Gemini API ────────────────────────────────────────────────────────────
-    async function callGemini(body, apiKey, model) {
-      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+    // ─── Shared prompt for video/image ────────────────────────────────────────
+    function buildMediaPrompt(extraText) {
+      return `You are a travel location extractor. The user shared a video or image from a social media travel post.
 
-      const res = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-        signal: AbortSignal.timeout(30000)
-      });
+Watch/analyze the content and identify the travel destination being shown or recommended.
+
+Look for:
+- Recognizable landmarks, famous buildings, distinctive landscapes
+- Text overlays, captions, signs, or subtitles visible in the content
+- Location tags, hashtags, or place names shown on screen
+- Distinctive architecture, nature, or cultural elements${extraText ? `\n\nAdditional context from the post: "${extraText}"` : ''}
+
+Do NOT attempt to access any external URLs. Only analyze what you can see/hear.
+
+Respond with ONLY raw JSON (no markdown, no code fences):
+{"found":true,"location":"Full location name (e.g. Amalfi Coast, Italy)","query":"Google Maps search query","confidence":"high|medium|low","note":"One sentence — which visual clue gave it away"}
+
+If no location can be identified: {"found":false,"note":"Reason"}`;
+    }
+
+    // ─── Gemini API call ──────────────────────────────────────────────────────
+    async function callGemini(body, apiKey, model) {
+      const res = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
+        { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body), signal: AbortSignal.timeout(60000) }
+      );
 
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
@@ -788,45 +787,43 @@ If no location can be identified:
         throw new Error(msg);
       }
 
-      const data = await res.json();
-      const raw  = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+      const data    = await res.json();
+      const raw     = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
       const cleaned = raw.replace(/```json\s*/g, '').replace(/```\s*/g, '').trim();
-      try {
-        return JSON.parse(cleaned);
-      } catch (_) {
-        const match = cleaned.match(/\{[\s\S]*\}/);
-        if (match) return JSON.parse(match[0]);
+      try { return JSON.parse(cleaned); }
+      catch (_) {
+        const m = cleaned.match(/\{[\s\S]*\}/);
+        if (m) return JSON.parse(m[0]);
         throw new Error('Could not parse AI response. Try again.');
       }
     }
 
-    // ─── Helpers ──────────────────────────────────────────────────────────────
-    function fileToBase64(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload  = () => resolve(reader.result.split(',')[1]);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
+    // ─── UI helpers ───────────────────────────────────────────────────────────
+    function toBase64(file) {
+      return new Promise((res, rej) => {
+        const r = new FileReader();
+        r.onload  = () => res(r.result.split(',')[1]);
+        r.onerror = rej;
+        r.readAsDataURL(file);
       });
     }
 
-    function showResult(result) {
+    function showResult(r) {
       hideError();
-      resultName.textContent = result.location || '—';
-      resultNote.textContent  = result.note || '';
-      const conf = (result.confidence || 'medium').toLowerCase();
-      resultConf.textContent = { high: '✓ High confidence', medium: '~ Medium confidence', low: '⚠ Low confidence' }[conf] || conf;
-      resultConf.className   = `result-confidence confidence-${conf}`;
-      const query = encodeURIComponent(result.query || result.location);
-      currentMapsUrl = `https://www.google.com/maps/search/?api=1&query=${query}`;
+      resultName.textContent = r.location || '—';
+      resultNote.textContent  = r.note || '';
+      const c = (r.confidence || 'medium').toLowerCase();
+      resultConf.textContent = { high: '✓ High confidence', medium: '~ Medium confidence', low: '⚠ Low confidence' }[c] || c;
+      resultConf.className   = `result-conf conf-${c}`;
+      mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(r.query || r.location)}`;
       resultCard.classList.add('visible');
       resultCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
-    function showError(msg)  { hideResult(); errorCard.innerHTML = `<strong>⚠️ </strong>${msg}`; errorCard.classList.add('visible'); }
-    function hideError()     { errorCard.classList.remove('visible'); }
-    function hideResult()    { resultCard.classList.remove('visible'); currentMapsUrl = null; }
-    function hideResults()   { hideError(); hideResult(); }
+    function showError(msg) { hideResult(); errorCard.innerHTML = `<strong>⚠️ </strong>${msg}`; errorCard.classList.add('visible'); }
+    function hideError()    { errorCard.classList.remove('visible'); }
+    function hideResult()   { resultCard.classList.remove('visible'); mapsUrl = null; }
+    function hideResults()  { hideError(); hideResult(); }
 
     init();
   </script>
