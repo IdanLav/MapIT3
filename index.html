@@ -90,6 +90,33 @@
     }
     .card-title { font-size: 13px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 14px; }
 
+    /* ─── URL input row ─── */
+    .url-row { display: flex; gap: 8px; align-items: center; }
+
+    input[type="url"] {
+      flex: 1; min-width: 0;
+      background: var(--input-bg); border: 1px solid var(--card-border);
+      border-radius: var(--radius-sm); color: var(--text); font-size: 14px;
+      font-family: inherit; padding: 12px 14px; -webkit-appearance: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    input[type="url"]:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-glow); }
+    input[type="url"]::placeholder { color: var(--text-muted); opacity: 0.7; font-size: 12px; }
+
+    .paste-url-btn {
+      flex-shrink: 0; background: rgba(67,97,238,0.2); border: 1px solid rgba(67,97,238,0.35);
+      color: #aab4ff; padding: 0 14px; height: 44px; border-radius: var(--radius-sm);
+      font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; white-space: nowrap;
+      transition: background 0.2s;
+    }
+    .paste-url-btn:hover { background: rgba(67,97,238,0.35); }
+
+    .url-status { font-size: 12px; margin-top: 6px; display: flex; align-items: center; gap: 5px; }
+    .url-status.hidden { display: none; }
+    .url-status.fetching { color: var(--text-muted); }
+    .url-status.ok  { color: var(--green); }
+    .url-status.err { color: #ff8fa3; }
+
     /* ─── Upload Area ─── */
     .upload-area {
       border: 2px dashed rgba(255,255,255,0.15); border-radius: var(--radius-sm);
@@ -325,8 +352,21 @@
 
     <!-- Input card -->
     <div class="card">
-      <div class="card-title">🎬 Video or screenshot</div>
+      <div class="card-title">🔗 Paste the post link</div>
 
+      <!-- URL input – primary -->
+      <div class="input-group">
+        <div class="url-row">
+          <input type="url" id="urlInput" placeholder="https://www.instagram.com/reel/…  or  facebook.com/…"
+            autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false">
+          <button class="paste-url-btn" id="pasteUrlBtn" type="button">Paste</button>
+        </div>
+        <div class="url-status hidden" id="urlStatus"></div>
+      </div>
+
+      <div class="or-divider">or upload the video / screenshot</div>
+
+      <!-- File upload – alternative -->
       <div class="upload-area" id="uploadArea" role="button" tabindex="0" aria-label="Upload video or image">
         <div class="upload-placeholder">
           <div class="upload-icon">🎬</div>
@@ -353,11 +393,11 @@
         <div class="progress-label"><div class="progress-spinner"></div><span id="progressLabel">Uploading…</span></div>
       </div>
 
-      <div class="or-divider">or add caption text</div>
+      <div class="or-divider">+ optional extra context</div>
 
       <div class="input-group">
         <div class="input-label">Caption / description <span class="badge">optional</span></div>
-        <textarea id="textInput" rows="3" placeholder='e.g. "This hidden gem in Santorini is unreal 🌅 #greece #travel"'></textarea>
+        <textarea id="textInput" rows="2" placeholder='Extra text from the post (helps if the link alone isn't enough)'></textarea>
       </div>
 
       <button class="analyze-btn" id="analyzeBtn" type="button">
@@ -395,10 +435,10 @@
     <!-- Tips -->
     <div class="tips-card">
       <div class="tips-title">💡 How to use</div>
-      <div class="tip-item"><span>1️⃣</span><span>Save or screen-record the travel video/reel from Instagram or Facebook</span></div>
-      <div class="tip-item"><span>2️⃣</span><span>Tap the upload area, pick the video — Gemini watches it and extracts the location</span></div>
-      <div class="tip-item"><span>3️⃣</span><span>Tap <strong>Open in Google Maps</strong> → <strong>Save ♡</strong> to add to your lists</span></div>
-      <div class="tip-item"><span>📱</span><span>Install as a PWA (Add to Home Screen in Safari) to share videos directly from Photos</span></div>
+      <div class="tip-item"><span>🔗</span><span><strong>Easiest:</strong> copy the link from Instagram or Facebook and paste it above — the app reads the post metadata automatically</span></div>
+      <div class="tip-item"><span>🎬</span><span><strong>Best results:</strong> save/screen-record the video and upload it — Gemini watches the actual video</span></div>
+      <div class="tip-item"><span>🔒</span><span>Private posts may not work via link — use the upload option instead</span></div>
+      <div class="tip-item"><span>📌</span><span>After Maps opens, tap <strong>Save ♡</strong> to add the place to your lists</span></div>
     </div>
   </main>
 
@@ -446,6 +486,9 @@
     let analyzing    = false;
 
     // DOM
+    const urlInput      = document.getElementById('urlInput');
+    const pasteUrlBtn   = document.getElementById('pasteUrlBtn');
+    const urlStatus     = document.getElementById('urlStatus');
     const uploadArea    = document.getElementById('uploadArea');
     const fileInput     = document.getElementById('fileInput');
     const imgPreview    = document.getElementById('imgPreview');
@@ -491,6 +534,17 @@
       });
       fileInput.addEventListener('change', e => { if (e.target.files[0]) setFile(e.target.files[0]); });
       removeBtn.addEventListener('click', e => { e.stopPropagation(); clearFile(); });
+
+      // Paste URL button
+      if (navigator.clipboard?.readText) {
+        pasteUrlBtn.addEventListener('click', async () => {
+          try { urlInput.value = (await navigator.clipboard.readText()).trim(); }
+          catch (_) {}
+        });
+      } else {
+        pasteUrlBtn.style.display = 'none';
+      }
+      urlInput.addEventListener('keydown', e => { if (e.key === 'Enter') handleAnalyze(); });
 
       analyzeBtn.addEventListener('click', handleAnalyze);
       mapsBtn.addEventListener('click', () => { if (mapsUrl) window.open(mapsUrl, '_blank'); });
@@ -547,6 +601,7 @@
         if (!metaRes && !fileRes) return;
         await Promise.all([cache.delete('meta'), cache.delete('file')]);
         const meta = metaRes ? await metaRes.json() : {};
+        if (meta.url) urlInput.value = meta.url;
         const text = [meta.title, meta.text].filter(Boolean).join('\n');
         if (text) textInput.value = text;
         if (fileRes) {
@@ -584,38 +639,104 @@
         installBanner.classList.remove('hidden');
     }
 
+    // ─── CORS fetch for URL metadata ──────────────────────────────────────────
+    const PROXIES = [
+      u => `https://corsproxy.io/?${encodeURIComponent(u)}`,
+      u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
+      u => `https://thingproxy.freeboard.io/fetch/${u}`
+    ];
+
+    async function fetchMeta(url) {
+      for (const proxy of PROXIES) {
+        try {
+          const res = await fetch(proxy(url), { signal: AbortSignal.timeout(7000) });
+          if (!res.ok) continue;
+          const html = await res.text();
+          const meta = extractMeta(html, url);
+          if (meta) return meta;
+        } catch (_) { continue; }
+      }
+      return null;
+    }
+
+    function extractMeta(html, sourceUrl) {
+      const doc   = new DOMParser().parseFromString(html, 'text/html');
+      const parts = [];
+
+      // OG / twitter meta tags — captions live here for public IG/FB posts
+      for (const name of ['og:description','og:title','description','twitter:description','twitter:title','og:site_name']) {
+        const el = doc.querySelector(`meta[property="${name}"], meta[name="${name}"]`);
+        if (el?.content?.trim()) parts.push(el.content.trim());
+      }
+
+      // JSON-LD structured data
+      doc.querySelectorAll('script[type="application/ld+json"]').forEach(s => {
+        try { parts.push(JSON.stringify(JSON.parse(s.textContent))); } catch (_) {}
+      });
+
+      // Instagram location slug in explore URLs
+      const locMatch = sourceUrl.match(/instagram\.com\/explore\/locations\/\d+\/([^/?#]+)/);
+      if (locMatch) parts.unshift('Location: ' + locMatch[1].replace(/-/g, ' '));
+
+      const combined = [...new Set(parts)].join('\n').slice(0, 3000);
+      return combined || null;
+    }
+
     // ─── Analyze ──────────────────────────────────────────────────────────────
     async function handleAnalyze() {
       const apiKey = localStorage.getItem(STORAGE_KEY) || '';
       if (!apiKey) { openModal(); showError('Please add your Gemini API key in Settings first.'); return; }
 
+      const url  = urlInput.value.trim();
       const text = textInput.value.trim();
-      if (!currentFile && !text) {
-        showError('Please upload a video or screenshot (or paste some caption text).');
+      if (!url && !currentFile && !text) {
+        showError('Paste a post link, or upload a video/screenshot.');
         return;
       }
 
       analyzing = true;
       setAnalyzing(true);
       hideResults();
+      setUrlStatus('', '');
 
       try {
         const model = localStorage.getItem(MODEL_KEY) || 'gemini-2.5-flash';
-        let result;
+        let pageMeta = '';
 
+        // Try to fetch page metadata from URL
+        if (url) {
+          setUrlStatus('fetching', '⏳ Fetching post metadata…');
+          pageMeta = await fetchMeta(url) || '';
+          if (pageMeta) {
+            setUrlStatus('ok', '✓ Post metadata fetched');
+          } else {
+            setUrlStatus('err', '⚠ Could not read post (private or blocked) — using URL context only');
+          }
+        }
+
+        let result;
         if (currentFile) {
+          // File takes priority: richer than URL metadata
+          const extraContext = [pageMeta, text].filter(Boolean).join('\n');
           const isVideo = currentFile.type.startsWith('video/') || /\.(mp4|mov|avi|webm|mkv)$/i.test(currentFile.name);
           result = isVideo
-            ? await analyzeViaFileAPI(currentFile, text, apiKey, model)
-            : await analyzeImageInline(currentFile, text, apiKey, model);
+            ? await analyzeViaFileAPI(currentFile, extraContext, apiKey, model)
+            : await analyzeImageInline(currentFile, extraContext, apiKey, model);
+        } else if (pageMeta || text) {
+          // URL metadata + optional text
+          result = await analyzeTextOnly([pageMeta, text, url ? `Source URL: ${url}` : ''].filter(Boolean).join('\n\n'), apiKey, model);
         } else {
-          result = await analyzeTextOnly(text, apiKey, model);
+          // URL only — let Gemini try with just the URL as context
+          result = await analyzeTextOnly(`Source URL: ${url}\n\nNote: page content could not be fetched. Use any knowledge you have about this URL to identify the travel location.`, apiKey, model);
         }
 
         if (result.found) {
           showResult(result);
         } else {
-          showError(`No location found. ${result.note || ''}<br><br>Try a clip that shows a recognizable landmark, a sign, or includes the location name in the video.`);
+          const hint = currentFile
+            ? 'Try a clip that shows a recognizable landmark or location name.'
+            : 'The post may be private. Try uploading the video or screenshot directly.';
+          showError(`No location found. ${result.note || ''}<br><br>${hint}`);
         }
       } catch (err) {
         showError(`Error: ${err.message}`);
@@ -624,6 +745,12 @@
         setAnalyzing(false);
         progressWrap.classList.remove('visible');
       }
+    }
+
+    function setUrlStatus(type, msg) {
+      if (!msg) { urlStatus.classList.add('hidden'); return; }
+      urlStatus.className = `url-status ${type}`;
+      urlStatus.textContent = msg;
     }
 
     function setAnalyzing(on) {
