@@ -6,7 +6,7 @@
   <title>MapIt – AI Travel Location Finder</title>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#4361ee">
-  <meta name="description" content="Paste a Facebook or Instagram travel post – AI extracts the location and opens Google Maps.">
+  <meta name="description" content="Screenshot a travel post – AI reads the image and opens Google Maps.">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="MapIt">
@@ -16,7 +16,6 @@
 
     :root {
       --bg: #0a0a18;
-      --bg2: #111128;
       --card: rgba(255,255,255,0.04);
       --card-border: rgba(255,255,255,0.08);
       --primary: #4361ee;
@@ -53,79 +52,43 @@
       padding-top: calc(16px + env(safe-area-inset-top, 0px));
     }
 
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-decoration: none;
-    }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
 
     .logo-icon {
-      width: 38px;
-      height: 38px;
+      width: 38px; height: 38px;
       background: linear-gradient(135deg, var(--primary), var(--purple));
       border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       font-size: 20px;
       box-shadow: 0 4px 20px var(--primary-glow);
       flex-shrink: 0;
     }
 
     .logo-text {
-      font-size: 22px;
-      font-weight: 800;
-      letter-spacing: -0.5px;
+      font-size: 22px; font-weight: 800; letter-spacing: -0.5px;
       background: linear-gradient(135deg, #fff 0%, #aab4ff 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
 
-    .logo-tagline {
-      font-size: 11px;
-      color: var(--text-muted);
-      font-weight: 500;
-      letter-spacing: 0.3px;
-    }
+    .logo-tagline { font-size: 11px; color: var(--text-muted); font-weight: 500; }
 
     .header-btn {
-      background: var(--card);
-      border: 1px solid var(--card-border);
-      color: var(--text-muted);
-      width: 40px;
-      height: 40px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: all 0.2s;
-      font-size: 18px;
+      background: var(--card); border: 1px solid var(--card-border);
+      color: var(--text-muted); width: 40px; height: 40px;
+      border-radius: 10px; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: all 0.2s; font-size: 18px;
     }
     .header-btn:hover, .header-btn:active { background: rgba(255,255,255,0.1); color: var(--text); }
 
     /* ─── Main ─── */
-    main {
-      max-width: 540px;
-      margin: 0 auto;
-      padding: 8px 16px 24px;
-    }
+    main { max-width: 540px; margin: 0 auto; padding: 8px 16px 24px; }
 
     /* ─── API Key Banner ─── */
     .api-banner {
       background: linear-gradient(135deg, rgba(247,37,133,0.15), rgba(114,9,183,0.15));
       border: 1px solid rgba(247,37,133,0.3);
-      border-radius: var(--radius-sm);
-      padding: 12px 14px;
-      margin-bottom: 16px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 13px;
-      cursor: pointer;
-      transition: opacity 0.2s;
+      border-radius: var(--radius-sm); padding: 12px 14px; margin-bottom: 16px;
+      display: flex; align-items: center; gap: 10px; font-size: 13px; cursor: pointer; transition: opacity 0.2s;
     }
     .api-banner:hover { opacity: 0.85; }
     .api-banner.hidden { display: none; }
@@ -135,495 +98,277 @@
 
     /* ─── Card ─── */
     .card {
-      background: var(--card);
-      border: 1px solid var(--card-border);
-      border-radius: var(--radius);
-      padding: 20px;
-      margin-bottom: 16px;
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      background: var(--card); border: 1px solid var(--card-border);
+      border-radius: var(--radius); padding: 20px; margin-bottom: 16px;
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
     }
 
-    .card-title {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
+    .card-title { font-size: 13px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 14px; }
+
+    /* ─── Image Upload ─── */
+    .upload-area {
+      border: 2px dashed rgba(255,255,255,0.15);
+      border-radius: var(--radius-sm);
+      padding: 28px 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
       margin-bottom: 14px;
+    }
+    .upload-area:hover, .upload-area.dragover {
+      border-color: var(--primary);
+      background: rgba(67,97,238,0.07);
+    }
+    .upload-area.has-image {
+      border-color: rgba(6,214,160,0.4);
+      background: rgba(6,214,160,0.04);
+      padding: 10px;
+    }
+
+    .upload-placeholder { pointer-events: none; }
+    .upload-icon { font-size: 36px; margin-bottom: 10px; }
+    .upload-title { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+    .upload-sub { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+
+    .upload-area.has-image .upload-placeholder { display: none; }
+
+    .img-preview-wrap { display: none; position: relative; }
+    .upload-area.has-image .img-preview-wrap { display: block; }
+
+    .img-preview {
+      width: 100%; max-height: 220px; object-fit: contain;
+      border-radius: 8px; display: block;
+    }
+
+    .img-preview-label {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; color: var(--green); margin-top: 8px; font-weight: 600;
+    }
+
+    .remove-img-btn {
+      position: absolute; top: 4px; right: 4px;
+      background: rgba(0,0,0,0.6); border: none; color: white;
+      width: 26px; height: 26px; border-radius: 50%; font-size: 14px;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+    .remove-img-btn:hover { background: rgba(239,35,60,0.7); }
+
+    input[type="file"] { display: none; }
+
+    /* ─── Divider ─── */
+    .or-divider {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 14px; color: var(--text-muted); font-size: 11px; font-weight: 600;
+    }
+    .or-divider::before, .or-divider::after {
+      content: ''; flex: 1; height: 1px; background: var(--card-border);
     }
 
     /* ─── Inputs ─── */
     .input-group { margin-bottom: 12px; }
 
     .input-label {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--text-muted);
-      margin-bottom: 6px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .badge {
+      background: rgba(255,255,255,0.08); padding: 1px 7px; border-radius: 20px;
+      font-size: 10px; font-weight: 500;
     }
 
-    .input-label .badge {
-      background: rgba(255,255,255,0.08);
-      padding: 1px 7px;
-      border-radius: 20px;
-      font-size: 10px;
-      font-weight: 500;
-    }
-
-    .url-input-wrap {
-      position: relative;
-      display: flex;
-      align-items: center;
-    }
-
-    .url-input-icon {
-      position: absolute;
-      left: 12px;
-      font-size: 16px;
-      opacity: 0.5;
-      pointer-events: none;
-    }
-
-    .paste-btn {
-      position: absolute;
-      right: 8px;
-      background: rgba(67,97,238,0.2);
-      border: 1px solid rgba(67,97,238,0.3);
-      color: #aab4ff;
-      padding: 5px 10px;
-      border-radius: 6px;
-      font-size: 11px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .paste-btn:hover { background: rgba(67,97,238,0.35); }
-    .paste-btn.hidden { display: none; }
-
-    input[type="text"], input[type="password"], textarea {
-      width: 100%;
-      background: var(--input-bg);
-      border: 1px solid var(--card-border);
-      border-radius: var(--radius-sm);
-      color: var(--text);
-      font-size: 14px;
-      font-family: inherit;
-      padding: 12px 14px;
-      transition: border-color 0.2s, box-shadow 0.2s;
+    input[type="text"], textarea {
+      width: 100%; background: var(--input-bg); border: 1px solid var(--card-border);
+      border-radius: var(--radius-sm); color: var(--text); font-size: 14px;
+      font-family: inherit; padding: 12px 14px; transition: border-color 0.2s, box-shadow 0.2s;
       -webkit-appearance: none;
     }
-
-    #urlInput {
-      padding-left: 36px;
-      padding-right: 68px;
+    input[type="text"]:focus, textarea:focus {
+      outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-glow);
     }
-
-    input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px var(--primary-glow);
-    }
-
     input::placeholder, textarea::placeholder { color: var(--text-muted); opacity: 0.7; }
-
-    textarea {
-      resize: vertical;
-      min-height: 80px;
-      line-height: 1.5;
-    }
-
-    .expand-toggle {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 12px;
-      color: var(--primary);
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 4px 0;
-      margin-bottom: 4px;
-      font-family: inherit;
-      font-weight: 500;
-      transition: opacity 0.2s;
-    }
-    .expand-toggle:hover { opacity: 0.8; }
-    .expand-toggle .chevron { transition: transform 0.25s; }
-    .expand-toggle.open .chevron { transform: rotate(180deg); }
-
-    .expandable { overflow: hidden; transition: max-height 0.3s ease; max-height: 0; }
-    .expandable.open { max-height: 160px; }
+    textarea { resize: vertical; min-height: 72px; line-height: 1.5; }
 
     /* ─── Analyze Button ─── */
     .analyze-btn {
       width: 100%;
       background: linear-gradient(135deg, var(--primary), var(--purple));
-      border: none;
-      border-radius: var(--radius-sm);
-      color: white;
-      font-size: 15px;
-      font-weight: 700;
-      padding: 14px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
+      border: none; border-radius: var(--radius-sm); color: white;
+      font-size: 15px; font-weight: 700; padding: 14px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
       transition: transform 0.15s, box-shadow 0.2s, opacity 0.2s;
       box-shadow: 0 4px 24px rgba(67,97,238,0.4);
-      -webkit-appearance: none;
-      font-family: inherit;
-      letter-spacing: 0.2px;
+      -webkit-appearance: none; font-family: inherit; letter-spacing: 0.2px;
     }
     .analyze-btn:hover { box-shadow: 0 6px 32px rgba(67,97,238,0.55); transform: translateY(-1px); }
     .analyze-btn:active { transform: translateY(0); }
     .analyze-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
     .btn-spinner {
-      width: 16px;
-      height: 16px;
-      border: 2px solid rgba(255,255,255,0.3);
-      border-top-color: white;
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-      display: none;
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,0.3); border-top-color: white;
+      border-radius: 50%; animation: spin 0.7s linear infinite; display: none;
     }
     .analyzing .btn-spinner { display: block; }
     .analyzing .btn-icon { display: none; }
-
     @keyframes spin { to { transform: rotate(360deg); } }
 
     /* ─── Result Card ─── */
     .result-card {
       background: linear-gradient(135deg, rgba(6,214,160,0.08), rgba(67,97,238,0.08));
       border: 1px solid rgba(6,214,160,0.25);
-      border-radius: var(--radius);
-      padding: 20px;
-      margin-bottom: 16px;
-      animation: slideUp 0.35s ease;
-      display: none;
+      border-radius: var(--radius); padding: 20px; margin-bottom: 16px;
+      animation: slideUp 0.35s ease; display: none;
     }
     .result-card.visible { display: block; }
-
     @keyframes slideUp {
       from { opacity: 0; transform: translateY(16px); }
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    .result-header {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      margin-bottom: 14px;
-    }
+    .result-header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
 
     .result-pin {
-      width: 44px;
-      height: 44px;
+      width: 44px; height: 44px;
       background: linear-gradient(135deg, var(--green), #00b4d8);
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      flex-shrink: 0;
-      box-shadow: 0 4px 16px rgba(6,214,160,0.35);
+      border-radius: 12px; display: flex; align-items: center; justify-content: center;
+      font-size: 22px; flex-shrink: 0; box-shadow: 0 4px 16px rgba(6,214,160,0.35);
     }
 
-    .result-location {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .result-location-name {
-      font-size: 18px;
-      font-weight: 700;
-      color: white;
-      line-height: 1.3;
-      margin-bottom: 4px;
-    }
+    .result-location { flex: 1; min-width: 0; }
+    .result-location-name { font-size: 18px; font-weight: 700; color: white; line-height: 1.3; margin-bottom: 4px; }
 
     .result-confidence {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 11px;
-      font-weight: 600;
-      padding: 3px 9px;
-      border-radius: 20px;
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 20px;
     }
-    .confidence-high { background: rgba(6,214,160,0.15); color: var(--green); border: 1px solid rgba(6,214,160,0.3); }
+    .confidence-high   { background: rgba(6,214,160,0.15);  color: var(--green);  border: 1px solid rgba(6,214,160,0.3); }
     .confidence-medium { background: rgba(255,214,10,0.12); color: var(--yellow); border: 1px solid rgba(255,214,10,0.3); }
-    .confidence-low { background: rgba(239,35,60,0.12); color: #ff8fa3; border: 1px solid rgba(239,35,60,0.25); }
+    .confidence-low    { background: rgba(239,35,60,0.12);  color: #ff8fa3;       border: 1px solid rgba(239,35,60,0.25); }
 
     .result-note {
-      font-size: 13px;
-      color: var(--text-muted);
-      line-height: 1.5;
-      padding: 10px 12px;
-      background: rgba(255,255,255,0.03);
-      border-radius: var(--radius-sm);
-      margin-bottom: 14px;
-      font-style: italic;
+      font-size: 13px; color: var(--text-muted); line-height: 1.5;
+      padding: 10px 12px; background: rgba(255,255,255,0.03);
+      border-radius: var(--radius-sm); margin-bottom: 14px; font-style: italic;
     }
 
     .maps-btn {
       width: 100%;
       background: linear-gradient(135deg, var(--green), #00b4d8);
-      border: none;
-      border-radius: var(--radius-sm);
-      color: #0a1a14;
-      font-size: 15px;
-      font-weight: 800;
-      padding: 14px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      transition: all 0.2s;
-      box-shadow: 0 4px 20px rgba(6,214,160,0.35);
-      font-family: inherit;
-      -webkit-appearance: none;
-      letter-spacing: 0.2px;
+      border: none; border-radius: var(--radius-sm); color: #0a1a14;
+      font-size: 15px; font-weight: 800; padding: 14px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      transition: all 0.2s; box-shadow: 0 4px 20px rgba(6,214,160,0.35);
+      font-family: inherit; -webkit-appearance: none; letter-spacing: 0.2px;
     }
     .maps-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 28px rgba(6,214,160,0.5); }
     .maps-btn:active { transform: translateY(0); }
 
     /* ─── Error Card ─── */
     .error-card {
-      background: rgba(239,35,60,0.08);
-      border: 1px solid rgba(239,35,60,0.25);
-      border-radius: var(--radius);
-      padding: 16px 18px;
-      margin-bottom: 16px;
-      display: none;
-      font-size: 13px;
-      line-height: 1.5;
-      animation: slideUp 0.3s ease;
+      background: rgba(239,35,60,0.08); border: 1px solid rgba(239,35,60,0.25);
+      border-radius: var(--radius); padding: 16px 18px; margin-bottom: 16px;
+      display: none; font-size: 13px; line-height: 1.5; animation: slideUp 0.3s ease;
     }
     .error-card.visible { display: block; }
     .error-card strong { color: #ff8fa3; }
-
-    /* ─── Tips card ─── */
-    .tips-card {
-      background: var(--card);
-      border: 1px solid var(--card-border);
-      border-radius: var(--radius);
-      padding: 16px 18px;
-      margin-bottom: 16px;
-    }
-
-    .tips-title {
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      margin-bottom: 10px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .tip-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-      font-size: 12.5px;
-      color: var(--text-muted);
-      line-height: 1.5;
-      padding: 5px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.04);
-    }
-    .tip-item:last-child { border-bottom: none; }
-    .tip-icon { flex-shrink: 0; margin-top: 1px; }
 
     /* ─── Install Banner ─── */
     .install-banner {
       background: linear-gradient(135deg, rgba(67,97,238,0.12), rgba(114,9,183,0.12));
       border: 1px solid rgba(67,97,238,0.25);
-      border-radius: var(--radius);
-      padding: 14px 16px;
-      margin-bottom: 16px;
-      font-size: 12.5px;
-      line-height: 1.6;
-      color: var(--text-muted);
+      border-radius: var(--radius); padding: 14px 16px; margin-bottom: 16px;
+      font-size: 12.5px; line-height: 1.6; color: var(--text-muted);
     }
     .install-banner.hidden { display: none; }
     .install-banner strong { color: #aab4ff; }
-    .install-steps { margin-top: 8px; padding-left: 4px; }
     .install-steps li { list-style: none; padding: 2px 0; }
-    .install-steps li::before { content: ''; }
+
+    /* ─── Tips ─── */
+    .tips-card {
+      background: var(--card); border: 1px solid var(--card-border);
+      border-radius: var(--radius); padding: 16px 18px; margin-bottom: 16px;
+    }
+    .tips-title {
+      font-size: 12px; font-weight: 700; color: var(--text-muted);
+      text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 10px;
+    }
+    .tip-item {
+      display: flex; align-items: flex-start; gap: 8px;
+      font-size: 12.5px; color: var(--text-muted); line-height: 1.5;
+      padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .tip-item:last-child { border-bottom: none; }
+    .tip-icon { flex-shrink: 0; margin-top: 1px; }
 
     /* ─── Settings Modal ─── */
     .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.7);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      z-index: 100;
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
+      position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      z-index: 100; display: flex; align-items: flex-end; justify-content: center;
       padding: 0 0 env(safe-area-inset-bottom, 0px);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.25s;
+      opacity: 0; pointer-events: none; transition: opacity 0.25s;
     }
     .modal-overlay.open { opacity: 1; pointer-events: all; }
 
     .modal {
-      background: #1a1a2e;
-      border: 1px solid var(--card-border);
-      border-radius: 20px 20px 0 0;
-      width: 100%;
-      max-width: 540px;
+      background: #1a1a2e; border: 1px solid var(--card-border);
+      border-radius: 20px 20px 0 0; width: 100%; max-width: 540px;
       padding: 0 20px 32px;
-      transform: translateY(100%);
-      transition: transform 0.3s cubic-bezier(0.32,0.72,0,1);
-      max-height: 90vh;
-      overflow-y: auto;
+      transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.32,0.72,0,1);
+      max-height: 90vh; overflow-y: auto;
     }
     .modal-overlay.open .modal { transform: translateY(0); }
 
-    .modal-handle {
-      width: 36px;
-      height: 4px;
-      background: rgba(255,255,255,0.2);
-      border-radius: 2px;
-      margin: 12px auto 20px;
-    }
+    .modal-handle { width: 36px; height: 4px; background: rgba(255,255,255,0.2); border-radius: 2px; margin: 12px auto 20px; }
+    .modal-title  { font-size: 18px; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+    .modal-section { margin-bottom: 20px; }
+    .modal-label  { font-size: 13px; font-weight: 600; color: var(--text-muted); margin-bottom: 8px; display: block; }
 
-    .modal-title {
-      font-size: 18px;
-      font-weight: 700;
-      margin-bottom: 20px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+    .key-input-wrap { position: relative; display: flex; align-items: center; }
 
-    .modal-section {
-      margin-bottom: 20px;
+    input[type="password"] {
+      width: 100%; background: var(--input-bg); border: 1px solid var(--card-border);
+      border-radius: var(--radius-sm); color: var(--text);
+      font-family: 'SF Mono','Fira Code',monospace; font-size: 13px; letter-spacing: 0.5px;
+      padding: 12px 44px 12px 14px; -webkit-appearance: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
-
-    .modal-label {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-muted);
-      margin-bottom: 8px;
-      display: block;
-    }
-
-    .key-input-wrap {
-      position: relative;
-      display: flex;
-      align-items: center;
-    }
-
-    #apiKeyInput {
-      padding-right: 44px;
-      font-family: 'SF Mono', 'Fira Code', monospace;
-      font-size: 13px;
-      letter-spacing: 0.5px;
-    }
+    input[type="password"]:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-glow); }
 
     .toggle-key-btn {
-      position: absolute;
-      right: 12px;
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      cursor: pointer;
-      font-size: 16px;
-      padding: 4px;
+      position: absolute; right: 12px; background: none; border: none;
+      color: var(--text-muted); cursor: pointer; font-size: 16px; padding: 4px;
     }
 
     .model-select {
-      width: 100%;
-      background: var(--input-bg);
-      border: 1px solid var(--card-border);
-      border-radius: var(--radius-sm);
-      color: var(--text);
-      font-size: 14px;
-      font-family: inherit;
-      padding: 12px 14px;
-      -webkit-appearance: none;
-      cursor: pointer;
+      width: 100%; background: var(--input-bg); border: 1px solid var(--card-border);
+      border-radius: var(--radius-sm); color: var(--text); font-size: 14px;
+      font-family: inherit; padding: 12px 14px; -webkit-appearance: none; cursor: pointer;
     }
     .model-select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-glow); }
-
     .model-select option { background: #1a1a2e; }
 
     .save-btn {
-      width: 100%;
-      background: linear-gradient(135deg, var(--primary), var(--purple));
-      border: none;
-      border-radius: var(--radius-sm);
-      color: white;
-      font-size: 14px;
-      font-weight: 700;
-      padding: 13px;
-      cursor: pointer;
-      font-family: inherit;
-      transition: all 0.2s;
-      box-shadow: 0 4px 20px var(--primary-glow);
+      width: 100%; background: linear-gradient(135deg, var(--primary), var(--purple));
+      border: none; border-radius: var(--radius-sm); color: white;
+      font-size: 14px; font-weight: 700; padding: 13px; cursor: pointer;
+      font-family: inherit; transition: all 0.2s; box-shadow: 0 4px 20px var(--primary-glow);
       -webkit-appearance: none;
     }
     .save-btn:hover { opacity: 0.9; }
 
-    .save-feedback {
-      text-align: center;
-      font-size: 13px;
-      color: var(--green);
-      margin-top: 10px;
-      min-height: 20px;
-      transition: opacity 0.3s;
-    }
-
-    .api-key-link {
-      font-size: 12px;
-      color: var(--primary);
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      margin-top: 6px;
-    }
+    .save-feedback { text-align: center; font-size: 13px; color: var(--green); margin-top: 10px; min-height: 20px; }
+    .api-key-link { font-size: 12px; color: var(--primary); text-decoration: none; display: inline-flex; align-items: center; gap: 4px; margin-top: 6px; }
     .api-key-link:hover { text-decoration: underline; }
 
-    .modal-divider {
-      height: 1px;
-      background: var(--card-border);
-      margin: 20px 0;
-    }
+    .modal-divider { height: 1px; background: var(--card-border); margin: 20px 0; }
+    .modal-info-row { display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: var(--text-muted); padding: 6px 0; }
 
-    .modal-info-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 13px;
-      color: var(--text-muted);
-      padding: 6px 0;
-    }
-    .modal-info-row a { color: var(--primary); text-decoration: none; }
+    footer { text-align: center; padding: 8px 20px 16px; font-size: 11px; color: var(--text-muted); opacity: 0.5; }
 
-    /* ─── Footer ─── */
-    footer {
-      text-align: center;
-      padding: 8px 20px 16px;
-      font-size: 11px;
-      color: var(--text-muted);
-      opacity: 0.5;
-    }
-
-    /* ─── Responsive / Desktop ─── */
     @media (min-width: 600px) {
       main { padding: 16px 24px 32px; }
       .modal { border-radius: 20px; margin-bottom: 40px; }
@@ -645,7 +390,6 @@
   </header>
 
   <main>
-    <!-- API key missing banner -->
     <div class="api-banner hidden" id="apiBanner">
       <span class="api-banner-icon">🔑</span>
       <span class="api-banner-text"><b>Add your Gemini API key</b> in Settings to get started</span>
@@ -654,39 +398,33 @@
 
     <!-- Input card -->
     <div class="card">
-      <div class="card-title">📎 Post link</div>
-      <div class="input-group">
-        <div class="input-label">Facebook or Instagram URL</div>
-        <div class="url-input-wrap">
-          <span class="url-input-icon">🔗</span>
-          <input
-            type="text"
-            id="urlInput"
-            placeholder="https://www.instagram.com/p/..."
-            autocomplete="off"
-            autocorrect="off"
-            autocapitalize="none"
-            spellcheck="false"
-          >
-          <button class="paste-btn" id="pasteBtn">Paste</button>
+      <div class="card-title">📸 Screenshot or photo</div>
+
+      <!-- Image upload area -->
+      <div class="upload-area" id="uploadArea" role="button" tabindex="0" aria-label="Upload image">
+        <div class="upload-placeholder">
+          <div class="upload-icon">🖼️</div>
+          <div class="upload-title">Tap to add a screenshot</div>
+          <div class="upload-sub">Take a screenshot of the Instagram/Facebook post or video<br>and upload it here</div>
+        </div>
+        <div class="img-preview-wrap">
+          <img class="img-preview" id="imgPreview" alt="Selected image">
+          <button class="remove-img-btn" id="removeImgBtn" type="button" title="Remove image">✕</button>
+          <div class="img-preview-label">✓ Image ready to analyze</div>
         </div>
       </div>
+      <input type="file" id="fileInput" accept="image/*">
 
-      <button class="expand-toggle" id="expandToggle" type="button">
-        <span class="chevron">▾</span> Add post caption (optional – helps with private posts)
-      </button>
-      <div class="expandable" id="expandable">
-        <div class="input-group">
-          <div class="input-label">
-            Post caption / description
-            <span class="badge">optional</span>
-          </div>
-          <textarea
-            id="textInput"
-            placeholder="Paste the post text here if the URL alone isn't enough…"
-            rows="3"
-          ></textarea>
-        </div>
+      <div class="or-divider">OR add text</div>
+
+      <!-- Optional text -->
+      <div class="input-group">
+        <div class="input-label">Paste caption / any text from the post <span class="badge">optional</span></div>
+        <textarea
+          id="textInput"
+          placeholder="e.g. &quot;Just visited this hidden gem in Santorini! 🌅 #greece #travel&quot;"
+          rows="3"
+        ></textarea>
       </div>
 
       <button class="analyze-btn" id="analyzeBtn" type="button">
@@ -696,10 +434,9 @@
       </button>
     </div>
 
-    <!-- Error card -->
+    <!-- Error / Result -->
     <div class="error-card" id="errorCard"></div>
 
-    <!-- Result card -->
     <div class="result-card" id="resultCard">
       <div class="result-header">
         <div class="result-pin">📍</div>
@@ -714,30 +451,34 @@
       </button>
     </div>
 
-    <!-- iOS install banner (shown only in mobile browser, not in standalone) -->
+    <!-- iOS install banner -->
     <div class="install-banner hidden" id="installBanner">
       <strong>📱 Use as an iOS share target</strong>
       <ol class="install-steps">
         <li>1. Open this page in <strong>Safari</strong></li>
         <li>2. Tap <strong>Share ⬆</strong> → <strong>"Add to Home Screen"</strong></li>
-        <li>3. Now on Facebook/Instagram, tap <strong>Share → MapIt</strong> — it auto-analyzes!</li>
+        <li>3. Screenshot an Instagram/Facebook post, then tap <strong>Share → MapIt</strong> — it auto-analyzes!</li>
       </ol>
     </div>
 
     <!-- Tips -->
     <div class="tips-card">
-      <div class="tips-title">💡 Tips</div>
+      <div class="tips-title">💡 How to use</div>
       <div class="tip-item">
-        <span class="tip-icon">📸</span>
-        <span>Works best with travel posts that mention a specific place, restaurant, or attraction</span>
+        <span class="tip-icon">1️⃣</span>
+        <span>Screenshot the Instagram/Facebook post or video that shows the travel destination</span>
       </div>
       <div class="tip-item">
-        <span class="tip-icon">🔒</span>
-        <span>For private posts, paste the caption text in the optional field below the URL</span>
+        <span class="tip-icon">2️⃣</span>
+        <span>Tap the upload area above, select your screenshot, then tap <strong>Find Location</strong></span>
       </div>
       <div class="tip-item">
-        <span class="tip-icon">📌</span>
-        <span>After opening Maps, tap <strong>Save</strong> to add it to your personal lists</span>
+        <span class="tip-icon">3️⃣</span>
+        <span>Tap <strong>Open in Google Maps</strong> → tap <strong>Save ♡</strong> to add to your lists</span>
+      </div>
+      <div class="tip-item">
+        <span class="tip-icon">📱</span>
+        <span>Install as an app (Add to Home Screen in Safari) to share screenshots directly from Photos</span>
       </div>
     </div>
   </main>
@@ -753,20 +494,10 @@
       <div class="modal-section">
         <label class="modal-label" for="apiKeyInput">Gemini API Key</label>
         <div class="key-input-wrap">
-          <input
-            type="password"
-            id="apiKeyInput"
-            placeholder="AIza..."
-            autocomplete="off"
-            autocorrect="off"
-            autocapitalize="none"
-            spellcheck="false"
-          >
+          <input type="password" id="apiKeyInput" placeholder="AIza..." autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false">
           <button class="toggle-key-btn" id="toggleKeyBtn" type="button" title="Show/hide key">👁</button>
         </div>
-        <a class="api-key-link" href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener">
-          🔑 Get a free Gemini API key ↗
-        </a>
+        <a class="api-key-link" href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener">🔑 Get a free Gemini API key ↗</a>
       </div>
 
       <div class="modal-section">
@@ -774,7 +505,7 @@
         <select class="model-select" id="modelSelect">
           <option value="gemini-2.5-flash">gemini-2.5-flash (recommended)</option>
           <option value="gemini-2.5-pro">gemini-2.5-pro (most capable)</option>
-          <option value="gemini-2.0-flash-lite">gemini-2.0-flash-lite (faster, cheaper)</option>
+          <option value="gemini-2.0-flash-lite">gemini-2.0-flash-lite (faster)</option>
           <option value="gemini-1.5-flash">gemini-1.5-flash</option>
         </select>
       </div>
@@ -783,77 +514,72 @@
       <div class="save-feedback" id="saveFeedback"></div>
 
       <div class="modal-divider"></div>
-
-      <div class="modal-info-row">
-        <span>Your API key is stored only on this device</span>
-      </div>
-      <div class="modal-info-row">
-        <span>Version</span>
-        <span>1.0.0</span>
-      </div>
+      <div class="modal-info-row"><span>API key stored only on this device</span></div>
+      <div class="modal-info-row"><span>Version</span><span>2.0.0</span></div>
     </div>
   </div>
 
   <script>
-    // ─── Constants & State ───────────────────────────────────────────────────
     const STORAGE_KEY = 'mapit_api_key';
     const MODEL_KEY   = 'mapit_model';
     let currentMapsUrl = null;
+    let currentImageFile = null;
 
-    // ─── DOM refs ────────────────────────────────────────────────────────────
-    const urlInput       = document.getElementById('urlInput');
-    const textInput      = document.getElementById('textInput');
-    const analyzeBtn     = document.getElementById('analyzeBtn');
-    const btnLabel       = analyzeBtn.querySelector('.btn-label');
-    const errorCard      = document.getElementById('errorCard');
-    const resultCard     = document.getElementById('resultCard');
-    const resultName     = document.getElementById('resultName');
-    const resultConf     = document.getElementById('resultConfidence');
-    const resultNote     = document.getElementById('resultNote');
-    const mapsBtn        = document.getElementById('mapsBtn');
-    const apiBanner      = document.getElementById('apiBanner');
-    const settingsBtn    = document.getElementById('settingsBtn');
-    const modalOverlay   = document.getElementById('modalOverlay');
-    const apiKeyInput    = document.getElementById('apiKeyInput');
-    const modelSelect    = document.getElementById('modelSelect');
-    const saveSettingsBtn= document.getElementById('saveSettingsBtn');
-    const saveFeedback   = document.getElementById('saveFeedback');
-    const toggleKeyBtn   = document.getElementById('toggleKeyBtn');
-    const pasteBtn       = document.getElementById('pasteBtn');
-    const expandToggle   = document.getElementById('expandToggle');
-    const expandable     = document.getElementById('expandable');
-    const installBanner  = document.getElementById('installBanner');
+    // DOM
+    const uploadArea    = document.getElementById('uploadArea');
+    const fileInput     = document.getElementById('fileInput');
+    const imgPreview    = document.getElementById('imgPreview');
+    const removeImgBtn  = document.getElementById('removeImgBtn');
+    const textInput     = document.getElementById('textInput');
+    const analyzeBtn    = document.getElementById('analyzeBtn');
+    const btnLabel      = analyzeBtn.querySelector('.btn-label');
+    const errorCard     = document.getElementById('errorCard');
+    const resultCard    = document.getElementById('resultCard');
+    const resultName    = document.getElementById('resultName');
+    const resultConf    = document.getElementById('resultConfidence');
+    const resultNote    = document.getElementById('resultNote');
+    const mapsBtn       = document.getElementById('mapsBtn');
+    const apiBanner     = document.getElementById('apiBanner');
+    const settingsBtn   = document.getElementById('settingsBtn');
+    const modalOverlay  = document.getElementById('modalOverlay');
+    const apiKeyInput   = document.getElementById('apiKeyInput');
+    const modelSelect   = document.getElementById('modelSelect');
+    const saveBtn       = document.getElementById('saveSettingsBtn');
+    const saveFeedback  = document.getElementById('saveFeedback');
+    const toggleKeyBtn  = document.getElementById('toggleKeyBtn');
+    const installBanner = document.getElementById('installBanner');
 
-    // ─── Init ────────────────────────────────────────────────────────────────
-    function init() {
+    // ─── Init ─────────────────────────────────────────────────────────────────
+    async function init() {
       registerSW();
       loadSettings();
-      handleShareTarget();
       showInstallBannerIfNeeded();
+
+      // Wire events
+      uploadArea.addEventListener('click', () => fileInput.click());
+      uploadArea.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') fileInput.click(); });
+      fileInput.addEventListener('change', e => { if (e.target.files[0]) setImageFile(e.target.files[0]); });
+      removeImgBtn.addEventListener('click', e => { e.stopPropagation(); clearImage(); });
+
+      // Drag & drop
+      uploadArea.addEventListener('dragover', e => { e.preventDefault(); uploadArea.classList.add('dragover'); });
+      uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('dragover'));
+      uploadArea.addEventListener('drop', e => {
+        e.preventDefault(); uploadArea.classList.remove('dragover');
+        const file = e.dataTransfer.files[0];
+        if (file && file.type.startsWith('image/')) setImageFile(file);
+      });
 
       analyzeBtn.addEventListener('click', handleAnalyze);
       mapsBtn.addEventListener('click', () => { if (currentMapsUrl) window.open(currentMapsUrl, '_blank'); });
       settingsBtn.addEventListener('click', openModal);
       modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) closeModal(); });
-      saveSettingsBtn.addEventListener('click', saveSettings);
+      saveBtn.addEventListener('click', saveSettings);
       toggleKeyBtn.addEventListener('click', toggleKeyVisibility);
-      expandToggle.addEventListener('click', toggleExpand);
       apiBanner.addEventListener('click', openModal);
 
-      // Paste button
-      if (navigator.clipboard && navigator.clipboard.readText) {
-        pasteBtn.classList.remove('hidden');
-        pasteBtn.addEventListener('click', async () => {
-          try {
-            const text = await navigator.clipboard.readText();
-            urlInput.value = text.trim();
-            urlInput.dispatchEvent(new Event('input'));
-          } catch (_) {}
-        });
-      }
-
-      // Enter key triggers analyze
-      urlInput.addEventListener('keydown', e => { if (e.key === 'Enter') handleAnalyze(); });
+      // Check for image shared via iOS share sheet (POST share target → cached by SW)
+      await checkPendingShare();
     }
 
     function registerSW() {
@@ -862,14 +588,59 @@
       }
     }
 
-    // ─── Settings ────────────────────────────────────────────────────────────
+    // ─── Image handling ────────────────────────────────────────────────────────
+    function setImageFile(file) {
+      currentImageFile = file;
+      const url = URL.createObjectURL(file);
+      imgPreview.src = url;
+      uploadArea.classList.add('has-image');
+      hideResults();
+    }
+
+    function clearImage() {
+      currentImageFile = null;
+      imgPreview.src = '';
+      uploadArea.classList.remove('has-image');
+      fileInput.value = '';
+    }
+
+    // ─── Pending share (iOS share sheet → SW cached the file) ─────────────────
+    async function checkPendingShare() {
+      if (!('caches' in window)) return;
+      try {
+        const pending = await caches.open('mapit-pending');
+        const [metaRes, fileRes] = await Promise.all([
+          pending.match('meta'),
+          pending.match('file')
+        ]);
+        if (!metaRes && !fileRes) return;
+
+        // Clean up immediately
+        await Promise.all([pending.delete('meta'), pending.delete('file')]);
+
+        const meta = metaRes ? await metaRes.json() : {};
+        const text = [meta.title, meta.text].filter(Boolean).join('\n');
+        if (text) textInput.value = text;
+
+        if (fileRes) {
+          const blob = await fileRes.blob();
+          if (blob.size > 0) {
+            const file = new File([blob], 'shared.jpg', { type: blob.type || 'image/jpeg' });
+            setImageFile(file);
+          }
+        }
+
+        setTimeout(handleAnalyze, 400);
+      } catch (_) {}
+    }
+
+    // ─── Settings ─────────────────────────────────────────────────────────────
     function loadSettings() {
-      const key   = localStorage.getItem(STORAGE_KEY) || '';
-      // Migrate old retired model to current default
+      const key = localStorage.getItem(STORAGE_KEY) || '';
       let model = localStorage.getItem(MODEL_KEY) || 'gemini-2.5-flash';
       if (model === 'gemini-2.0-flash') { model = 'gemini-2.5-flash'; localStorage.setItem(MODEL_KEY, model); }
-      apiKeyInput.value   = key;
-      modelSelect.value   = model;
+      apiKeyInput.value = key;
+      modelSelect.value = model;
       apiBanner.classList.toggle('hidden', !!key);
     }
 
@@ -884,66 +655,30 @@
     }
 
     function toggleKeyVisibility() {
-      const isPassword = apiKeyInput.type === 'password';
-      apiKeyInput.type = isPassword ? 'text' : 'password';
-      toggleKeyBtn.textContent = isPassword ? '🙈' : '👁';
+      const isPass = apiKeyInput.type === 'password';
+      apiKeyInput.type = isPass ? 'text' : 'password';
+      toggleKeyBtn.textContent = isPass ? '🙈' : '👁';
     }
 
     function openModal()  { modalOverlay.classList.add('open'); }
     function closeModal() { modalOverlay.classList.remove('open'); }
 
-    function toggleExpand() {
-      const open = expandable.classList.toggle('open');
-      expandToggle.classList.toggle('open', open);
-    }
-
-    // ─── iOS Share Target ────────────────────────────────────────────────────
-    function handleShareTarget() {
-      const params = new URLSearchParams(window.location.search);
-      const sharedUrl  = params.get('url')  || '';
-      const sharedText = params.get('text') || '';
-      const sharedTitle = params.get('title') || '';
-
-      if (sharedUrl || sharedText) {
-        if (sharedUrl)  urlInput.value = sharedUrl;
-        const extra = [sharedTitle, sharedText].filter(Boolean).join('\n');
-        if (extra) {
-          textInput.value = extra;
-          expandable.classList.add('open');
-          expandToggle.classList.add('open');
-        }
-        // Auto-analyze after a tick (give page time to render)
-        setTimeout(handleAnalyze, 300);
-        // Clean URL so user can re-share fresh
-        history.replaceState({}, '', './');
-      }
-    }
-
-    // ─── Install Banner ──────────────────────────────────────────────────────
+    // ─── Install Banner ────────────────────────────────────────────────────────
     function showInstallBannerIfNeeded() {
-      const isStandalone = window.matchMedia('(display-mode: standalone)').matches
-                        || window.navigator.standalone;
+      const isStandalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
       const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-      if (isIOS && !isStandalone) {
-        installBanner.classList.remove('hidden');
-      }
+      if (isIOS && !isStandalone) installBanner.classList.remove('hidden');
     }
 
-    // ─── Analysis flow ───────────────────────────────────────────────────────
+    // ─── Analyze ──────────────────────────────────────────────────────────────
     async function handleAnalyze() {
       const apiKey = localStorage.getItem(STORAGE_KEY) || '';
-      if (!apiKey) {
-        openModal();
-        showError('Please add your Gemini API key in Settings first.');
-        return;
-      }
+      if (!apiKey) { openModal(); showError('Please add your Gemini API key in Settings first.'); return; }
 
-      const url  = urlInput.value.trim();
       const text = textInput.value.trim();
 
-      if (!url && !text) {
-        showError('Please paste a Facebook or Instagram post URL.');
-        urlInput.focus();
+      if (!currentImageFile && !text) {
+        showError('Please add a screenshot of the post, or paste some text from it.');
         return;
       }
 
@@ -951,11 +686,15 @@
       hideResults();
 
       try {
-        const result = await analyzePost(url, text, apiKey);
+        const model = localStorage.getItem(MODEL_KEY) || 'gemini-2.5-flash';
+        const result = currentImageFile
+          ? await analyzeImage(currentImageFile, text, apiKey, model)
+          : await analyzeText(text, apiKey, model);
+
         if (result.found) {
           showResult(result);
         } else {
-          showError(`No location found. ${result.note || ''}<br><br>Try pasting the post caption in the optional text field.`);
+          showError(`No location found. ${result.note || ''}<br><br>Try adding a clearer screenshot that shows the location name or a recognizable landmark.`);
         }
       } catch (err) {
         showError(`Error: ${err.message}`);
@@ -970,151 +709,125 @@
       btnLabel.textContent = on ? 'Analyzing…' : 'Find Location';
     }
 
-    // ─── Content fetching ────────────────────────────────────────────────────
-    async function fetchPageContent(url) {
-      if (!url) return '';
-      const proxies = [
-        `https://corsproxy.io/?${encodeURIComponent(url)}`,
-        `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`
-      ];
-      for (const proxyUrl of proxies) {
-        try {
-          const res = await fetch(proxyUrl, { signal: AbortSignal.timeout(8000) });
-          if (!res.ok) continue;
-          const html = await res.text();
-          return extractMeta(html);
-        } catch (_) { continue; }
-      }
-      return '';
-    }
+    // ─── Image analysis ────────────────────────────────────────────────────────
+    async function analyzeImage(file, extraText, apiKey, model) {
+      const base64 = await fileToBase64(file);
+      const mimeType = file.type || 'image/jpeg';
 
-    function extractMeta(html) {
-      const parser = new DOMParser();
-      const doc    = parser.parseFromString(html, 'text/html');
-      const metas  = [];
-
-      const og = ['og:description','og:title','og:site_name',
-                  'description','twitter:description','twitter:title'];
-      for (const name of og) {
-        const el = doc.querySelector(`meta[property="${name}"], meta[name="${name}"]`);
-        if (el?.content) metas.push(el.content);
-      }
-
-      // JSON-LD structured data
-      doc.querySelectorAll('script[type="application/ld+json"]').forEach(s => {
-        try { metas.push(JSON.stringify(JSON.parse(s.textContent))); } catch (_) {}
-      });
-
-      return metas.slice(0, 6).join('\n').slice(0, 3000);
-    }
-
-    // ─── Gemini API call ─────────────────────────────────────────────────────
-    async function analyzePost(url, userText, apiKey) {
-      const model      = localStorage.getItem(MODEL_KEY) || 'gemini-2.0-flash';
-      const pageContent = await fetchPageContent(url);
-
-      const prompt = buildPrompt(url, pageContent, userText);
-      return callGemini(prompt, apiKey, model);
-    }
-
-    function buildPrompt(url, pageContent, userText) {
-      const parts = [];
-      if (url)          parts.push(`Post URL: ${url}`);
-      if (pageContent)  parts.push(`Page meta/content:\n${pageContent}`);
-      if (userText)     parts.push(`User-provided post text:\n${userText}`);
-
-      return `You are a travel location extractor. The user has shared a social media post (Facebook or Instagram) that is a travel recommendation or travel-related content.
-
-${parts.join('\n\n')}
+      const textPart = `You are a travel location extractor. The user has shared a screenshot of a social media post (Instagram/Facebook) or a video frame/photo showing a travel destination.
 
 Your task:
-1. Identify the travel destination, place, restaurant, hotel, attraction, or location being recommended or featured in this post.
-2. This is NOT about where the post was made — it's about the place being SHOWN or RECOMMENDED.
-3. Prefer the most specific location (e.g. "Eiffel Tower, Paris" over just "France").
+1. Look at the image carefully and identify the travel destination, place, restaurant, hotel, landmark, or attraction being shown or recommended.
+2. Use visual clues (landscape, architecture, text in the image, signs, hashtags, captions visible in the screenshot).
+3. Prefer the most specific location possible.
+${extraText ? `\nAdditional text from the post: "${extraText}"` : ''}
+
+Do NOT attempt to access any URLs. Only analyze what you can see.
 
 Respond with ONLY a raw JSON object (no markdown, no code fences):
-{
-  "found": true,
-  "location": "Full location name (e.g. Santorini, Greece)",
-  "query": "Search query for Google Maps (e.g. Santorini Greece)",
-  "confidence": "high" | "medium" | "low",
-  "note": "One short sentence explaining what you found"
-}
+{"found":true,"location":"Full location name","query":"Google Maps search query","confidence":"high|medium|low","note":"One sentence explaining what visual clue you used"}
 
-If you truly cannot identify any location, respond:
-{"found": false, "note": "Brief reason why"}`;
+If no location can be identified:
+{"found":false,"note":"Brief reason why"}`;
+
+      const body = {
+        contents: [{
+          parts: [
+            { inline_data: { mime_type: mimeType, data: base64 } },
+            { text: textPart }
+          ]
+        }],
+        generationConfig: { temperature: 0.1, maxOutputTokens: 512 }
+      };
+
+      return callGemini(body, apiKey, model);
     }
 
-    async function callGemini(prompt, apiKey, model) {
-      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+    // ─── Text-only analysis ────────────────────────────────────────────────────
+    async function analyzeText(userText, apiKey, model) {
+      const prompt = `You are a travel location extractor. Analyze this social media post caption and identify the travel destination being featured.
+
+Post text:
+"""
+${userText}
+"""
+
+Look for: place names, city/country names, landmark names, location hashtags (#paris, #santorini, etc.), or any geographic context.
+Do NOT attempt to access any URLs.
+
+Respond with ONLY a raw JSON object (no markdown, no code fences):
+{"found":true,"location":"Full location name","query":"Google Maps search query","confidence":"high|medium|low","note":"One sentence explaining what clue you used"}
+
+If no location can be identified:
+{"found":false,"note":"Brief reason why"}`;
 
       const body = {
         contents: [{ parts: [{ text: prompt }] }],
-        generationConfig: {
-          temperature: 0.1,
-          maxOutputTokens: 512,
-          responseMimeType: 'application/json'
-        }
+        generationConfig: { temperature: 0.1, maxOutputTokens: 512, responseMimeType: 'application/json' }
       };
+
+      return callGemini(body, apiKey, model);
+    }
+
+    // ─── Gemini API ────────────────────────────────────────────────────────────
+    async function callGemini(body, apiKey, model) {
+      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
 
       const res = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
-        signal: AbortSignal.timeout(20000)
+        signal: AbortSignal.timeout(30000)
       });
 
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
         const msg = err?.error?.message || `HTTP ${res.status}`;
-        if (res.status === 400 && msg.includes('API_KEY')) throw new Error('Invalid API key. Check Settings.');
+        if (res.status === 400 && msg.toLowerCase().includes('api key')) throw new Error('Invalid API key. Check Settings.');
         if (res.status === 429) throw new Error('Rate limit reached. Wait a moment and try again.');
         throw new Error(msg);
       }
 
       const data = await res.json();
       const raw  = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
-
-      // Parse JSON — handle model wrapping in code fences
       const cleaned = raw.replace(/```json\s*/g, '').replace(/```\s*/g, '').trim();
       try {
         return JSON.parse(cleaned);
       } catch (_) {
-        // Try to extract JSON object from response
         const match = cleaned.match(/\{[\s\S]*\}/);
         if (match) return JSON.parse(match[0]);
         throw new Error('Could not parse AI response. Try again.');
       }
     }
 
-    // ─── UI helpers ──────────────────────────────────────────────────────────
+    // ─── Helpers ──────────────────────────────────────────────────────────────
+    function fileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload  = () => resolve(reader.result.split(',')[1]);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
     function showResult(result) {
       hideError();
       resultName.textContent = result.location || '—';
-      resultNote.textContent = result.note || '';
-
+      resultNote.textContent  = result.note || '';
       const conf = (result.confidence || 'medium').toLowerCase();
-      resultConf.textContent  = { high: '✓ High confidence', medium: '~ Medium confidence', low: '⚠ Low confidence' }[conf] || conf;
-      resultConf.className    = `result-confidence confidence-${conf}`;
-
+      resultConf.textContent = { high: '✓ High confidence', medium: '~ Medium confidence', low: '⚠ Low confidence' }[conf] || conf;
+      resultConf.className   = `result-confidence confidence-${conf}`;
       const query = encodeURIComponent(result.query || result.location);
       currentMapsUrl = `https://www.google.com/maps/search/?api=1&query=${query}`;
-
       resultCard.classList.add('visible');
       resultCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
-    function showError(msg) {
-      hideResult();
-      errorCard.innerHTML = `<strong>⚠️ </strong>${msg}`;
-      errorCard.classList.add('visible');
-    }
+    function showError(msg)  { hideResult(); errorCard.innerHTML = `<strong>⚠️ </strong>${msg}`; errorCard.classList.add('visible'); }
+    function hideError()     { errorCard.classList.remove('visible'); }
+    function hideResult()    { resultCard.classList.remove('visible'); currentMapsUrl = null; }
+    function hideResults()   { hideError(); hideResult(); }
 
-    function hideError()  { errorCard.classList.remove('visible'); }
-    function hideResult() { resultCard.classList.remove('visible'); currentMapsUrl = null; }
-    function hideResults(){ hideError(); hideResult(); }
-
-    // ─── Boot ────────────────────────────────────────────────────────────────
     init();
   </script>
 </body>
