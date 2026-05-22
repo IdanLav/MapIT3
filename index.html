@@ -772,10 +772,10 @@
       <div class="modal-section">
         <label class="modal-label" for="modelSelect">Gemini Model</label>
         <select class="model-select" id="modelSelect">
-          <option value="gemini-2.0-flash">gemini-2.0-flash (recommended)</option>
+          <option value="gemini-2.5-flash">gemini-2.5-flash (recommended)</option>
+          <option value="gemini-2.5-pro">gemini-2.5-pro (most capable)</option>
           <option value="gemini-2.0-flash-lite">gemini-2.0-flash-lite (faster, cheaper)</option>
           <option value="gemini-1.5-flash">gemini-1.5-flash</option>
-          <option value="gemini-1.5-pro">gemini-1.5-pro (most capable)</option>
         </select>
       </div>
 
@@ -865,7 +865,9 @@
     // ─── Settings ────────────────────────────────────────────────────────────
     function loadSettings() {
       const key   = localStorage.getItem(STORAGE_KEY) || '';
-      const model = localStorage.getItem(MODEL_KEY) || 'gemini-2.0-flash';
+      // Migrate old retired model to current default
+      let model = localStorage.getItem(MODEL_KEY) || 'gemini-2.5-flash';
+      if (model === 'gemini-2.0-flash') { model = 'gemini-2.5-flash'; localStorage.setItem(MODEL_KEY, model); }
       apiKeyInput.value   = key;
       modelSelect.value   = model;
       apiBanner.classList.toggle('hidden', !!key);
